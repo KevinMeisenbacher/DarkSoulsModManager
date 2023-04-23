@@ -1,0 +1,123 @@
+﻿// Data
+            dt = new DataTable("Mods");
+            DataColumn activeColumn = new DataColumn();
+            activeColumn.DataType = typeof(CheckBox);
+            activeColumn.ColumnName = "Active";
+            activeColumn.Caption = "Active";
+            dt.Columns.Add(activeColumn);
+
+            DataColumn modNameColumn = new DataColumn();
+            modNameColumn.DataType = typeof(String);
+            modNameColumn.ColumnName = "Mod Name";
+            modNameColumn.Caption = "Mod Name";
+            dt.Columns.Add(modNameColumn);
+
+             internal void addMod(DataGridView dataGridView1, DataTable dt)
+        {
+            for (int i=0; i<dt.Rows.Count; ++i)
+            {
+                String name = fi.Name;
+                addRow(dataGridView1, dt.Rows[i]);
+            }
+        }
+
+        private void addRow(DataGridView dataGridView1, DataRow dataRow)
+        {
+            DataGridViewRow newRow = new DataGridViewRow();
+            addTextBoxCell(newRow, dataRow["Mod Name"].ToString());
+            if (dataRow["Value"].ToString().ToLower().Equals("true")
+                || dataRow["Value"].ToString().ToLower().Equals("false"))
+            {
+                addCheckBoxCell(newRow, dataRow["Value"].ToString());
+            }
+            else
+            {
+                addTextBoxCell(newRow, dataRow["Value"].ToString());
+            }
+            dataGridView1.Rows.Add(newRow);
+        }
+
+        private void addCheckBoxCell(DataGridViewRow newRow, string p)
+        {
+            DataGridViewCheckBoxCell checkBox = new DataGridViewCheckBoxCell();
+            checkBox.IndeterminateValue = "0";
+            checkBox.FalseValue = "0";
+            checkBox.TrueValue = "1";
+            if (bool.Parse(p))
+            {
+                checkBox.Value = "1";
+            }
+            else
+            {
+                checkBox.Value = 0;
+            }
+            newRow.Cells.Add(checkBox);
+        }
+
+        private void addTextBoxCell(DataGridViewRow newRow, string p)
+        {
+            DataGridViewTextBoxCell modNameCell = new DataGridViewTextBoxCell();
+            modNameCell.Value = p;
+            newRow.Cells.Add(modNameCell);
+        }
+
+        
+                    string[] files = Directory.GetFiles(ds3);
+                    string[] zip = { "*.zip", "*.rar", "*.7z" };
+                    string[] zipped = Directory.GetFiles(ds3);
+                    if (files.Contains("zip") || files.Contains("rar") || files.Contains("7z")) zipped = files;
+
+        
+
+        private void getSelectedItem()
+        {
+            Console.WriteLine(tool.name);
+            if (modFolder.Contains(toolsDD.SelectedText))
+            {
+                selectedFolder = modFolder;
+                Console.WriteLine("Selected folder: " + selectedFolder);
+                Console.WriteLine("Selected Item: " + toolsDD.SelectedText);
+            }
+            else Console.WriteLine("getSelectedItem is written inaccurately");
+            //if (toolsDD.SelectedText.Contains(tool.name)) selectedFolder = modFolder;
+        }
+
+        // Match tool names
+        DialogResult res = MessageBox.Show("Match names for mod tools?", "Match Tool Names", MessageBoxButtons.YesNo);
+        
+        // modFile is each file in modFiles
+        foreach (string modFile in modFiles)
+        {
+            if (res == DialogResult.Yes && modFile.Contains("exe") && !modFile.Contains("config"))
+            {
+                // Check names
+                folder = item.Substring(moddingPath.Length + 1);
+                file = modFile.Substring(item.Length + 1);
+                Console.WriteLine(folder);
+                Console.WriteLine(file);
+
+                Console.WriteLine(modFile.Substring(0, item.Length));
+            }
+            if (modFile.Contains("exe") && !modFile.Contains("config"))
+                toolsDD.Items.Add(item.Substring(moddingPath.Length + 1));
+        }
+                    
+        private void matchToolNames_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("Match names for mod tools?", "Match Tool Names", MessageBoxButtons.YesNo);
+            if (res == DialogResult.Yes)
+            {
+                foreach(string item in moddingDir)
+                {
+                    foreach(string modFile in modFiles)
+                    {
+                        Console.WriteLine(modFile);
+                    }
+                }
+            }
+            else
+            {
+                notificationLabel.Text = "";
+            }
+
+        }

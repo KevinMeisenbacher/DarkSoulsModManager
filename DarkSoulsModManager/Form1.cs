@@ -229,10 +229,7 @@ namespace DarkSoulsModManager
                             toolsDD.Items.Add(item.Substring(moddingPath.Length + 1));
                     }
                 }
-                if (!File.Exists("mod dir config.txt"))
-                {
-                    File.Create("mod dir config.txt");
-                }
+                File.Create("mod dir config.txt");
                 modDirConfig = "mod dir config.txt";
                 File.WriteAllText(modDirConfig, moddingPath);
             }

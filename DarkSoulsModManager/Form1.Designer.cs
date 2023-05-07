@@ -156,11 +156,11 @@
             // 
             this.selectPath.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.selectPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.selectPath.Location = new System.Drawing.Point(274, 3);
+            this.selectPath.Location = new System.Drawing.Point(3, 3);
             this.selectPath.Name = "selectPath";
             this.selectPath.Size = new System.Drawing.Size(108, 23);
             this.selectPath.TabIndex = 4;
-            this.selectPath.Text = "Steam\'s Drive";
+            this.selectPath.Text = "Navigate to Game";
             this.selectPath.UseVisualStyleBackColor = true;
             this.selectPath.Click += new System.EventHandler(this.selectPath_Click);
             // 
@@ -168,7 +168,7 @@
             // 
             this.viewModEngine.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.viewModEngine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.viewModEngine.Location = new System.Drawing.Point(130, 3);
+            this.viewModEngine.Location = new System.Drawing.Point(117, 3);
             this.viewModEngine.Name = "viewModEngine";
             this.viewModEngine.Size = new System.Drawing.Size(138, 23);
             this.viewModEngine.TabIndex = 1;
@@ -180,7 +180,7 @@
             // 
             this.launchDS3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.launchDS3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.launchDS3.Location = new System.Drawing.Point(3, 3);
+            this.launchDS3.Location = new System.Drawing.Point(261, 3);
             this.launchDS3.Name = "launchDS3";
             this.launchDS3.Size = new System.Drawing.Size(121, 23);
             this.launchDS3.TabIndex = 5;
@@ -203,9 +203,9 @@
             // 
             // flowLayoutPanel5
             // 
-            this.flowLayoutPanel5.Controls.Add(this.launchDS3);
-            this.flowLayoutPanel5.Controls.Add(this.viewModEngine);
             this.flowLayoutPanel5.Controls.Add(this.selectPath);
+            this.flowLayoutPanel5.Controls.Add(this.viewModEngine);
+            this.flowLayoutPanel5.Controls.Add(this.launchDS3);
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Right;
             this.flowLayoutPanel5.Location = new System.Drawing.Point(800, 0);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
@@ -219,7 +219,7 @@
             this.loadLooseParams.Name = "loadLooseParams";
             this.loadLooseParams.Size = new System.Drawing.Size(160, 23);
             this.loadLooseParams.TabIndex = 10;
-            this.loadLooseParams.Text = "loadLooseParams";
+            this.loadLooseParams.Text = "Load Loose Params";
             this.loadLooseParams.UseVisualStyleBackColor = true;
             this.loadLooseParams.Click += new System.EventHandler(this.loadLooseParams_Click);
             // 
@@ -230,7 +230,7 @@
             this.loadUXMFiles.Name = "loadUXMFiles";
             this.loadUXMFiles.Size = new System.Drawing.Size(160, 23);
             this.loadUXMFiles.TabIndex = 11;
-            this.loadUXMFiles.Text = "loadUXMFiles";
+            this.loadUXMFiles.Text = "Load UXM Files";
             this.loadUXMFiles.UseVisualStyleBackColor = true;
             this.loadUXMFiles.Click += new System.EventHandler(this.loadUXMFiles_Click);
             // 
@@ -241,7 +241,7 @@
             this.useModOverrideDirectory.Name = "useModOverrideDirectory";
             this.useModOverrideDirectory.Size = new System.Drawing.Size(160, 23);
             this.useModOverrideDirectory.TabIndex = 12;
-            this.useModOverrideDirectory.Text = "useModOverrideDirectory";
+            this.useModOverrideDirectory.Text = "Use Mod Override Directory";
             this.useModOverrideDirectory.UseVisualStyleBackColor = true;
             this.useModOverrideDirectory.Click += new System.EventHandler(this.useModOverrideDirectory_Click);
             // 
@@ -252,7 +252,7 @@
             this.useAlternateSaveFile.Name = "useAlternateSaveFile";
             this.useAlternateSaveFile.Size = new System.Drawing.Size(160, 23);
             this.useAlternateSaveFile.TabIndex = 9;
-            this.useAlternateSaveFile.Text = "useAlternateSaveFile";
+            this.useAlternateSaveFile.Text = "Use Alternate Save File";
             this.useAlternateSaveFile.UseVisualStyleBackColor = true;
             this.useAlternateSaveFile.Click += new System.EventHandler(this.useAlternateSaveFile_Click);
             // 
@@ -263,7 +263,7 @@
             this.blockNetworkAccess.Name = "blockNetworkAccess";
             this.blockNetworkAccess.Size = new System.Drawing.Size(159, 23);
             this.blockNetworkAccess.TabIndex = 8;
-            this.blockNetworkAccess.Text = "blockNetworkAccess";
+            this.blockNetworkAccess.Text = "Block Network Access";
             this.blockNetworkAccess.UseVisualStyleBackColor = true;
             this.blockNetworkAccess.Click += new System.EventHandler(this.blockNetworkAccess_Click);
             // 

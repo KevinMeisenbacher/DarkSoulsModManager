@@ -15,13 +15,26 @@ namespace DarkSoulsModManager
     public partial class Form1 : Form
     {
         private string text, ds3, defaultSteamDir, customSteamDir, selectedDrive, modDirConfig, modengine, moddingPath, modTool, tool;
-        private string[] lines, files, moddingDir, modFiles, tools;
+        private string[] lines, dirs, moddingDir, modFiles, tools;
         private List<Mod> mods;
+        private List<String> gameFiles;
         private Mod activeMod;
 
         public Form1()
         {
             InitializeComponent();
+
+            // Array for figuring out if a folder is a mod
+            gameFiles = new List<string>();
+            gameFiles.Add("action");
+            gameFiles.Add("chr");
+            gameFiles.Add("event");
+            gameFiles.Add("map");
+            gameFiles.Add("msg");
+            gameFiles.Add("param");
+            gameFiles.Add("parts");
+            gameFiles.Add("sound");
+
             // File browsing and notifications
             notificationLabel.Text = "";
             if (File.Exists("mod dir config.txt"))
@@ -87,14 +100,27 @@ namespace DarkSoulsModManager
                 {
                     // Automatically find Dark Souls 3's directory
                     selectedDrive = fbd.SelectedPath;
-
-                    defaultSteamDir = selectedDrive + @"Program Files (x86)";
-                    customSteamDir = selectedDrive + @"My Games";
-                    if (defaultSteamDir.Contains("Steam"))
-                        ds3 = defaultSteamDir + @"\Steam\steamapps\common\DARK SOULS III\Game";
-                    else
-                        ds3 = customSteamDir + @"\Steam\steamapps\common\DARK SOULS III\Game";
-
+                    string[] driveDirs = Directory.GetDirectories(selectedDrive);
+                    string[] contents;
+                    foreach(string dir in driveDirs)
+                    {
+                        try
+                        {
+                            contents = Directory.GetDirectories(dir);
+                        } catch(System.UnauthorizedAccessException)
+                        {
+                            continue;
+                        }
+                        foreach(string folder in contents)
+                        {
+                            if (folder.Contains("Steam"))
+                            {
+                                Console.WriteLine("Folder: " + folder);
+                                ds3 = folder + @"\steamapps\common\DARK SOULS III\Game";
+                            }
+                        }
+                    }
+                    Console.WriteLine("ds3: " + ds3);
                     modengine = ds3 + @"\modengine.ini";
                     // Setup ability to parse modengine.ini
                     text = File.ReadAllText(modengine);
@@ -110,43 +136,37 @@ namespace DarkSoulsModManager
             // Create file browser and file list
             webBrowser1.Url = new Uri(ds3);
             mods = new List<Mod>();
-            files = Directory.GetFiles(ds3);
+            dirs = Directory.GetDirectories(ds3);
 
             // Fetch mod archives and trim them to mod names
-            int modTrim;
-            if (ds3.Contains(defaultSteamDir)) modTrim = 56;
-            else modTrim = 51;
+            int modTrim = ds3.Length;
 
             // These 2 things will be used to trim file extensions
             string modTrimmed;
             int trimLength;
 
-            foreach (string file in files)
+            foreach (string dir in dirs)
             {
                 // Add mods by checking if their extension is whatever zip a mod would be
-                DataGridViewCheckBoxCell cb = new DataGridViewCheckBoxCell();
                 Mod mod = new Mod();
-                mod.modName = file.Substring(modTrim);
-                if (mod.modName.Contains("zip") || mod.modName.Contains("rar") || mod.modName.Contains("7z"))
+                modTrimmed = dir.Substring(ds3.Length + 1);
+                trimLength = modTrimmed.Length;
+
+                // Filter to folders that contain mod files
+                string[] modFolders = Directory.GetDirectories(dir);
+                foreach (string folder in modFolders)
                 {
-                    mods.Add(mod);
+                    string folderName = folder.Substring(1 + dir.Length);
+                    foreach (string gameFile in gameFiles)
+                    {
+                        if (!mods.Contains(mod) && folderName.Equals(gameFile) && !dir.Contains("backup"))
+                            mods.Add(mod);
+                    }
                 }
 
+
                 // Trim file extensions from mod names
-                if (file.Contains("*.7z"))
-                {
-                    modTrimmed = file.Substring(file.Length - modTrim - 3);
-                    trimLength = modTrimmed.Length;
-                    mod.modName = file.Substring(trimLength, file.Length - trimLength - 3);
-                }
-                else
-                {
-                    modTrimmed = file.Substring(file.Length - modTrim - 4);
-                    trimLength = modTrimmed.Length;
-                    mod.modName = file.Substring(trimLength, file.Length - trimLength - 4);
-                }
-                Console.WriteLine(file.Length);
-                Console.WriteLine(mod.modName);
+                mod.modName = dir.Substring(ds3.Length + 1);
 
                 if (lines[41].Contains(mod.modName))
                 {

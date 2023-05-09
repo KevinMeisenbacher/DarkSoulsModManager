@@ -14,15 +14,22 @@ namespace DarkSoulsModManager
 {
     public partial class Form1 : Form
     {
-        private string text, ds3, defaultSteamDir, customSteamDir, selectedDrive, modDirConfig, modengine, moddingPath, modTool, tool;
-        private string[] lines, dirs, moddingDir, modFiles, tools;
+        private string ds3, steamLib, game, selectedDrive, modengine, moddingPath;                  // paths
+        private string text, modDirConfig, modTool, tool;                                           // string objects
+        private string blockLine, paramLine, uxmLine, overrideLine, overrideDirLine, altSaveLine;   // Modengine lines
+        private string[] lines, dirs, moddingDir, modFiles, tools, games;                           // Mostly file navimigation
         private List<Mod> mods;
-        private List<String> gameFiles;
+        private List<String> gameFiles, moddableGames;
         private Mod activeMod;
 
         public Form1()
         {
             InitializeComponent();
+
+            // Populate gamesDD with moddable games
+            moddableGames = new List<string>();
+            moddableGames.Add("DARK SOULS III");
+            moddableGames.Add("Sekiro");
 
             // Array for figuring out if a folder is a mod
             gameFiles = new List<string>();
@@ -43,7 +50,6 @@ namespace DarkSoulsModManager
                 moddingPath = File.ReadAllText(modDirConfig);
                 moddingDir = Directory.GetDirectories(moddingPath);
                 //selectedDrive = memoryLines[1];
-                Console.WriteLine(modDirConfig);
                 loadModdingTools();
                 //initializeTable();
                 loadToolTips();
@@ -115,31 +121,67 @@ namespace DarkSoulsModManager
                         {
                             if (folder.Contains("Steam"))
                             {
-                                Console.WriteLine("Folder: " + folder);
-                                ds3 = folder + @"\steamapps\common\DARK SOULS III\Game";
+                                steamLib = folder + @"\steamapps\common";
                             }
                         }
                     }
-                    Console.WriteLine("ds3: " + ds3);
-                    modengine = ds3 + @"\modengine.ini";
-                    // Setup ability to parse modengine.ini
-                    text = File.ReadAllText(modengine);
-                    lines = File.ReadAllLines(modengine);
 
+                    games = Directory.GetDirectories(steamLib);
+                    foreach (string item in games)
+                    {
+                        Console.WriteLine("Steam game: " + item);
+                    }
+
+                    foreach (string item in moddableGames)
+                    {
+                        gamesDD.Items.Add(item);
+                    }
+
+                    foreach(string item in gamesDD.Items)
+                    {
+                        if (item.Contains("Game"))
+                            continue;
+                        else {
+                            gamesDD.SelectedItem = item;
+                            break;
+                        }
+                    }
+
+                    determineGame();
                     initializeTable();
                 }
             }
         }
 
+        private void determineGame()
+        {
+            if (gamesDD.Text.Contains("DARK SOULS III"))
+                game = steamLib + "/" + gamesDD.Text + "/Game";
+            else
+                game = steamLib + "/" + gamesDD.Text;
+
+            // Setup ability to parse modengine.ini
+            modengine = game + @"\modengine.ini";
+            text = File.ReadAllText(modengine);
+            lines = File.ReadAllLines(modengine);
+        }
+
+        private void gamesDD_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            determineGame();
+            initializeTable();
+        }
+
         private void initializeTable()
         {
+            readModEngine();
             // Create file browser and file list
-            webBrowser1.Url = new Uri(ds3);
+            webBrowser1.Url = new Uri(game);
             mods = new List<Mod>();
-            dirs = Directory.GetDirectories(ds3);
+            dirs = Directory.GetDirectories(game);
 
             // Fetch mod archives and trim them to mod names
-            int modTrim = ds3.Length;
+            int modTrim = game.Length;
 
             // These 2 things will be used to trim file extensions
             string modTrimmed;
@@ -149,7 +191,7 @@ namespace DarkSoulsModManager
             {
                 // Add mods by checking if their extension is whatever zip a mod would be
                 Mod mod = new Mod();
-                modTrimmed = dir.Substring(ds3.Length + 1);
+                modTrimmed = dir.Substring(game.Length + 1);
                 trimLength = modTrimmed.Length;
 
                 // Filter to folders that contain mod files
@@ -166,13 +208,12 @@ namespace DarkSoulsModManager
 
 
                 // Trim file extensions from mod names
-                mod.modName = dir.Substring(ds3.Length + 1);
+                mod.modName = dir.Substring(game.Length + 1);
 
-                if (lines[41].Contains(mod.modName))
+                if (overrideDirLine.Contains(mod.modName))
                 {
                     activeMod = mod;
                     mod.active = true;
-                    Console.WriteLine("Active mod: " + activeMod.modName);
                 }
             }
 
@@ -182,6 +223,33 @@ namespace DarkSoulsModManager
             dataGridView1.AutoResizeColumns();
 
             colourModEngineButtons();
+        }
+
+        private void readModEngine()
+        {
+            foreach(string line in lines)
+            {
+                if (line.Contains("blockNetworkAccess"))
+                    blockLine = line;
+                if (line.Contains("loadLooseParams"))
+                    paramLine = line;
+                if (line.Contains("loadUXMFiles"))
+                    uxmLine = line;
+                if (line.Contains("useModOverrideDirectory"))
+                    overrideLine = line;
+                if (line.Contains("modOverrideDirectory="))
+                    overrideDirLine = line;
+                if (line.Contains("useAlternateSaveFile"))
+                    altSaveLine = line;
+            }
+
+            Console.WriteLine("\n");
+            Console.WriteLine(blockLine);
+            Console.WriteLine(paramLine);
+            Console.WriteLine(uxmLine);
+            Console.WriteLine(overrideLine);
+            Console.WriteLine(overrideDirLine);
+            Console.WriteLine(altSaveLine);
         }
 
         // Change the active mod whenever another mod is clicked
@@ -209,21 +277,6 @@ namespace DarkSoulsModManager
                 }
                 Console.WriteLine("Active mod: " + activeMod.modName);
             }
-        }
-
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
         }
 
         private void pickModdingDirectory_Click(object sender, EventArgs e)
@@ -320,11 +373,11 @@ namespace DarkSoulsModManager
 
         private void viewModEngine_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(ds3 + "/modengine");
+            Console.WriteLine(game + "/modengine");
             try
             {
                 //MessageBox.Show(text);
-                Process.Start(ds3 + "/modengine.ini");
+                Process.Start(game + "/modengine.ini");
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -441,27 +494,28 @@ namespace DarkSoulsModManager
         // Colour the buttons on the left based on their booleans
         private void colourModEngineButtons()
         {
-            if (lines[18].Contains("blockNetworkAccess=1"))
+            readModEngine();
+            if (blockLine.Contains("blockNetworkAccess=1"))
                 blockNetworkAccess.BackColor = Color.FromArgb(128, 64, 0);
             else
                 blockNetworkAccess.BackColor = Color.Black;
 
-            if (lines[25].Contains("useAlternateSaveFile=1"))
+            if (altSaveLine.Contains("useAlternateSaveFile=1"))
                 useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
             else
                 useAlternateSaveFile.BackColor = Color.Black;
 
-            if (lines[31].Contains("loadLooseParams=1"))
+            if (paramLine.Contains("loadLooseParams=1"))
                 loadLooseParams.BackColor = Color.FromArgb(128, 64, 0);
             else
                 loadLooseParams.BackColor = Color.Black;
 
-            if (lines[35].Contains("loadUXMFiles=1"))
+            if (uxmLine.Contains("loadUXMFiles=1"))
                 loadUXMFiles.BackColor = Color.FromArgb(128, 64, 0);
             else
                 loadUXMFiles.BackColor = Color.Black;
 
-            if (lines[38].Contains("useModOverrideDirectory=1"))
+            if (overrideLine.Contains("useModOverrideDirectory=1"))
                 useModOverrideDirectory.BackColor = Color.FromArgb(128, 64, 0);
             else
                 useModOverrideDirectory.BackColor = Color.Black;

@@ -52,6 +52,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.gamesDD = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             this.flowLayoutPanel5.SuspendLayout();
@@ -146,7 +147,7 @@
             // notificationLabel
             // 
             this.notificationLabel.AutoSize = true;
-            this.notificationLabel.Location = new System.Drawing.Point(3, 34);
+            this.notificationLabel.Location = new System.Drawing.Point(3, 32);
             this.notificationLabel.Name = "notificationLabel";
             this.notificationLabel.Size = new System.Drawing.Size(124, 18);
             this.notificationLabel.TabIndex = 7;
@@ -158,9 +159,9 @@
             this.selectPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.selectPath.Location = new System.Drawing.Point(3, 3);
             this.selectPath.Name = "selectPath";
-            this.selectPath.Size = new System.Drawing.Size(108, 23);
+            this.selectPath.Size = new System.Drawing.Size(139, 23);
             this.selectPath.TabIndex = 4;
-            this.selectPath.Text = "Navigate to Game";
+            this.selectPath.Text = "Navigate to Steam Library";
             this.selectPath.UseVisualStyleBackColor = true;
             this.selectPath.Click += new System.EventHandler(this.selectPath_Click);
             // 
@@ -168,9 +169,9 @@
             // 
             this.viewModEngine.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.viewModEngine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.viewModEngine.Location = new System.Drawing.Point(117, 3);
+            this.viewModEngine.Location = new System.Drawing.Point(148, 3);
             this.viewModEngine.Name = "viewModEngine";
-            this.viewModEngine.Size = new System.Drawing.Size(138, 23);
+            this.viewModEngine.Size = new System.Drawing.Size(117, 23);
             this.viewModEngine.TabIndex = 1;
             this.viewModEngine.Text = "View Mod Engine";
             this.viewModEngine.UseVisualStyleBackColor = true;
@@ -180,9 +181,9 @@
             // 
             this.launchDS3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.launchDS3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.launchDS3.Location = new System.Drawing.Point(261, 3);
+            this.launchDS3.Location = new System.Drawing.Point(271, 3);
             this.launchDS3.Name = "launchDS3";
-            this.launchDS3.Size = new System.Drawing.Size(121, 23);
+            this.launchDS3.Size = new System.Drawing.Size(101, 23);
             this.launchDS3.TabIndex = 5;
             this.launchDS3.Text = "Launch Game";
             this.launchDS3.UseVisualStyleBackColor = true;
@@ -207,9 +208,9 @@
             this.flowLayoutPanel5.Controls.Add(this.viewModEngine);
             this.flowLayoutPanel5.Controls.Add(this.launchDS3);
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(800, 0);
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(806, 0);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(386, 51);
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(380, 51);
             this.flowLayoutPanel5.TabIndex = 16;
             // 
             // loadLooseParams
@@ -281,7 +282,6 @@
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(166, 425);
             this.flowLayoutPanel1.TabIndex = 13;
-            this.flowLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
             // 
             // flowLayoutPanel2
             // 
@@ -307,11 +307,25 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.gamesDD);
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel4);
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel5);
             this.splitContainer1.Size = new System.Drawing.Size(1186, 480);
             this.splitContainer1.SplitterDistance = 425;
             this.splitContainer1.TabIndex = 17;
+            // 
+            // gamesDD
+            // 
+            this.gamesDD.BackColor = System.Drawing.Color.Black;
+            this.gamesDD.Dock = System.Windows.Forms.DockStyle.Right;
+            this.gamesDD.ForeColor = System.Drawing.Color.White;
+            this.gamesDD.FormattingEnabled = true;
+            this.gamesDD.Location = new System.Drawing.Point(671, 0);
+            this.gamesDD.Name = "gamesDD";
+            this.gamesDD.Size = new System.Drawing.Size(135, 26);
+            this.gamesDD.TabIndex = 17;
+            this.gamesDD.Text = "Game";
+            this.gamesDD.SelectedIndexChanged += new System.EventHandler(this.gamesDD_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -329,7 +343,6 @@
             this.Name = "Form1";
             this.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.Text = "Dark Souls Mod Manager";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.flowLayoutPanel4.ResumeLayout(false);
             this.flowLayoutPanel4.PerformLayout();
@@ -364,5 +377,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ComboBox gamesDD;
     }
 }

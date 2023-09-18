@@ -7,29 +7,35 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DarkSoulsModManager
 {
-    public partial class Form1 : Form
+    public partial class ModEngine : Form
     {
         private string ds3, steamLib, game, selectedDrive, modengine, moddingPath;                  // paths
-        private string text, modDirConfig, modTool, tool;                                           // string objects
+        private string text, gameTracker, gameDirConfig, modDirConfig, modTool, tool;               // string objects
         private string blockLine, paramLine, uxmLine, overrideLine, overrideDirLine, altSaveLine;   // Modengine lines
-        private string[] lines, dirs, moddingDir, modFiles, tools, games;                           // Mostly file navimigation
-        private List<Mod> mods;
+        private string[] lines, dirs, moddingDir, modFiles, tools, games;                           // Mostly file navimagation
+        private List<Mod> mods, activeMods;
         private List<String> gameFiles, moddableGames;
         private Mod activeMod;
+        private ModManager manager;
 
-        public Form1()
+        public ModEngine()
         {
             InitializeComponent();
 
             // Populate gamesDD with moddable games
             moddableGames = new List<string>();
+            //moddableGames.Add("Dark Souls Prepare to Die Edition");
+            //moddableGames.Add("DARK SOULS REMASTERED");
+            //moddableGames.Add("DARK SOULS II Scholar of the First Sin");
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
+            moddableGames.Add("Elden Ring");
 
             // Array for figuring out if a folder is a mod
             gameFiles = new List<string>();
@@ -42,16 +48,16 @@ namespace DarkSoulsModManager
             gameFiles.Add("parts");
             gameFiles.Add("sound");
 
-            // File browsing and notifications
+            // Initialize the notification label
             notificationLabel.Text = "";
+
+            // Load mods
             if (File.Exists("mod dir config.txt"))
             {
                 modDirConfig = "mod dir config.txt";
                 moddingPath = File.ReadAllText(modDirConfig);
                 moddingDir = Directory.GetDirectories(moddingPath);
-                //selectedDrive = memoryLines[1];
                 loadModdingTools();
-                //initializeTable();
                 loadToolTips();
             }
             else
@@ -59,11 +65,42 @@ namespace DarkSoulsModManager
                 moddingPath = "";
             }
 
+            // Load games
+            foreach (string item in moddableGames)
+            {
+                gamesDD.Items.Add(item);
+            }
+
+            foreach (string item in gamesDD.Items)
+            {
+                if (isModEngine())
+                {
+                    gamesDD.SelectedItem = item;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            //Console.WriteLine(gamesDD.SelectedItem);
+
+            if (File.Exists("game dir config.txt"))
+            {
+                steamLib = File.ReadAllText("game dir config.txt");
+                initializeTable();
+            }
+            else
+            {
+                steamLib = "";
+            }
+
             dataGridView1.AllowUserToResizeRows = true;
         }
 
         private void loadToolTips()
         {
+            // Modengine Controls
             ToolTip blockNetworkAccessToolTip = new ToolTip();
             blockNetworkAccessToolTip.BackColor = Color.Black;
             blockNetworkAccessToolTip.ForeColor = Color.White;
@@ -90,6 +127,32 @@ namespace DarkSoulsModManager
             useModOverrideDirectoryToolTip.BackColor = Color.Black;
             useModOverrideDirectoryToolTip.ForeColor = Color.White;
             useModOverrideDirectoryToolTip.SetToolTip(this.useModOverrideDirectory, "The directory from which to load a mod");
+
+            // Modding Tool Buttons
+            ToolTip moddingDirToolTip = new ToolTip();
+            moddingDirToolTip.SetToolTip(this.openModDirWizard, "Click here to navigate to your modding directory");
+
+            ToolTip toolsDDToolTip = new ToolTip();
+            toolsDDToolTip.SetToolTip(this.toolsDD, "Automatically launches whatever tool is selected");
+
+            ToolTip launchModdingToolToolTip = new ToolTip();
+            launchModdingToolToolTip.SetToolTip(this.launchTool, "Click here to launch the selected modding tool");
+
+            ToolTip mergeToolTip = new ToolTip();
+            mergeToolTip.SetToolTip(this.mergeMods, "Opens up a menu for mod merging. In beta and works, but gameplay mods will overwrite each other");
+
+            // Mod Manager Buttons
+            ToolTip refreshToolTip = new ToolTip();
+            refreshToolTip.SetToolTip(this.refresh, "Reloads the mod manager to update the list of mods and tools");
+
+            ToolTip steamDirToolTip = new ToolTip();
+            steamDirToolTip.SetToolTip(this.selectPath, "Click here to go to the drive Steam is in. For example, mine is in C:");
+
+            ToolTip viewModEngineToolTip = new ToolTip();
+            viewModEngineToolTip.SetToolTip(this.viewModEngine, "Opens up modengine.ini to double check config or if you still want to manually edit it like a troglodyte");
+
+            ToolTip gamesDDToolTip = new ToolTip();
+            gamesDDToolTip.SetToolTip(this.gamesDD, "Pick a game to manage");
         }
 
         private void selectPath_Click(object sender, EventArgs e)
@@ -100,7 +163,7 @@ namespace DarkSoulsModManager
         private void buildTable()
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
-            { Description = "Pick the drive Steam is in and click OK" })
+            { Description = "Pick the drive Steam is in (C: for example) and click OK" })
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
@@ -127,27 +190,9 @@ namespace DarkSoulsModManager
                     }
 
                     games = Directory.GetDirectories(steamLib);
-                    foreach (string item in games)
-                    {
-                        Console.WriteLine("Steam game: " + item);
-                    }
 
-                    foreach (string item in moddableGames)
-                    {
-                        gamesDD.Items.Add(item);
-                    }
-
-                    foreach(string item in gamesDD.Items)
-                    {
-                        if (item.Contains("Game"))
-                            continue;
-                        else {
-                            gamesDD.SelectedItem = item;
-                            break;
-                        }
-                    }
-
-                    determineGame();
+                    gameDirConfig = "game dir config.txt";
+                    File.WriteAllText(gameDirConfig, steamLib);
                     initializeTable();
                 }
             }
@@ -155,26 +200,70 @@ namespace DarkSoulsModManager
 
         private void determineGame()
         {
-            if (gamesDD.Text.Contains("DARK SOULS III"))
-                game = steamLib + "/" + gamesDD.Text + "/Game";
+            if (gamesDD.Text.Contains("DARK SOULS II") || gamesDD.Text.Contains("ELDEN"))
+            {
+                //Console.WriteLine("GamesDD text: " + gamesDD.Text);
+                game = steamLib + "\\" + gamesDD.SelectedItem + "\\Game";
+            }
+            else if (gamesDD.Text.Contains("Die"))
+            {
+                game = steamLib + "\\" + gamesDD.Text + "\\DATA";
+            }
             else
-                game = steamLib + "/" + gamesDD.Text;
+            {
+                game = steamLib + "\\" + gamesDD.Text;
+            }
 
             // Setup ability to parse modengine.ini
-            modengine = game + @"\modengine.ini";
-            text = File.ReadAllText(modengine);
-            lines = File.ReadAllLines(modengine);
+            if (isModEngine())
+            {
+                try
+                {
+                    modengine = game + @"\modengine.ini";
+                    text = File.ReadAllText(modengine);
+                    lines = File.ReadAllLines(modengine);
+                } catch (DirectoryNotFoundException)
+                {
+                    MessageBox.Show("Whoops! Looks like you forgot to set the game's directory. Lemme get that for ya");
+                    buildTable();
+                }
+            }
+
+            else if (isPTDE())
+            {
+                var dad = new DSDaD();
+                dad.Location = this.Location;
+                dad.Show();
+                this.Hide();
+            }
+
+            else if (isME2())
+            {
+                var me2 = new ME2();
+                me2.Location = this.Location;
+                me2.Show();
+                this.Hide();
+            }
+
+            // Remember what game the mod manager is on
+            gameTracker = "game tracker.txt";
+            File.WriteAllText(gameTracker, game);
+            Console.WriteLine("Game: " + game);
         }
 
         private void gamesDD_SelectedIndexChanged(object sender, EventArgs e)
         {
-            determineGame();
             initializeTable();
         }
 
         private void initializeTable()
         {
-            readModEngine();
+            if (gamesDD.Text.Contains("Game"))
+                gamesDD.SelectedItem = "DARK SOULS III";
+            determineGame();
+            if (isModEngine())
+                readModEngine();
+
             // Create file browser and file list
             webBrowser1.Url = new Uri(game);
             mods = new List<Mod>();
@@ -201,19 +290,20 @@ namespace DarkSoulsModManager
                     string folderName = folder.Substring(1 + dir.Length);
                     foreach (string gameFile in gameFiles)
                     {
-                        if (!mods.Contains(mod) && folderName.Equals(gameFile) && !dir.Contains("backup"))
+                        if (!mods.Contains(mod) && gameFile.Contains(folderName) && !dir.Contains("backup"))
                             mods.Add(mod);
                     }
                 }
 
-
                 // Trim file extensions from mod names
-                mod.modName = dir.Substring(game.Length + 1);
+                mod.modName = modTrimmed;
 
-                if (overrideDirLine.Contains(mod.modName))
-                {
-                    activeMod = mod;
-                    mod.active = true;
+                if (isModEngine()) {
+                    if (overrideDirLine.Contains(mod.modName))
+                    {
+                        activeMod = mod;
+                        mod.active = true;
+                    }
                 }
             }
 
@@ -222,34 +312,38 @@ namespace DarkSoulsModManager
             dataGridView1.DataSource = mods;
             dataGridView1.AutoResizeColumns();
 
-            colourModEngineButtons();
+            if (isModEngine())
+                colourModEngineButtons();
         }
 
-        private void readModEngine()
+        private void launchTool_Click(object sender, EventArgs e)
         {
-            foreach(string line in lines)
-            {
-                if (line.Contains("blockNetworkAccess"))
-                    blockLine = line;
-                if (line.Contains("loadLooseParams"))
-                    paramLine = line;
-                if (line.Contains("loadUXMFiles"))
-                    uxmLine = line;
-                if (line.Contains("useModOverrideDirectory"))
-                    overrideLine = line;
-                if (line.Contains("modOverrideDirectory="))
-                    overrideDirLine = line;
-                if (line.Contains("useAlternateSaveFile"))
-                    altSaveLine = line;
-            }
+            launchSelectedTool();
+        }
 
-            Console.WriteLine("\n");
-            Console.WriteLine(blockLine);
-            Console.WriteLine(paramLine);
-            Console.WriteLine(uxmLine);
-            Console.WriteLine(overrideLine);
-            Console.WriteLine(overrideDirLine);
-            Console.WriteLine(altSaveLine);
+        private void GoBack_Click(object sender, EventArgs e)
+        {
+            webBrowser1.GoBack();
+        }
+
+        private void GoForward_Click(object sender, EventArgs e)
+        {
+            webBrowser1.GoForward();
+        }
+
+        private void mergeMods_Click(object sender, EventArgs e)
+        {
+            if (isModEngine())
+            {
+                var form3 = new ModMerger();
+                form3.Location = this.Location;
+                form3.Show();
+            }
+        }
+
+        private void refresh_Click(object sender, EventArgs e)
+        {
+            initializeTable();
         }
 
         // Change the active mod whenever another mod is clicked
@@ -260,25 +354,28 @@ namespace DarkSoulsModManager
             {
                 this.dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+            if (isModEngine()) {
 
-            // When a checkbox is clicked, change the active mod to the corresponding one
-            if ((bool)this.dataGridView1.CurrentCell.Value == true)
-            {
-                Console.WriteLine(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value);
-                foreach (Mod mod in mods)
+                // When a checkbox is clicked, change the active mod to the corresponding one
+                if ((bool)this.dataGridView1.CurrentCell.Value == true)
                 {
-                    if (mod.modName.Equals(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value))
+                    //Console.WriteLine(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value);
+                    foreach (Mod mod in mods)
                     {
-                        activeMod = mod;
-                        changeActiveMod();
+                        if (mod.modName.Equals(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value))
+                        {
+                            activeMod = mod;
+                            changeActiveMod();
+                        }
+                        else
+                            mod.active = false;
                     }
-                    else
-                        mod.active = false;
+                    Console.WriteLine("Active mod: " + activeMod.modName);
                 }
-                Console.WriteLine("Active mod: " + activeMod.modName);
             }
         }
 
+        #region moddingTools
         private void pickModdingDirectory_Click(object sender, EventArgs e)
         {
             initModdingTools();
@@ -329,6 +426,11 @@ namespace DarkSoulsModManager
 
         private void toolsDD_SelectedIndexChanged(object sender, EventArgs e)
         {
+            launchSelectedTool();
+        }
+
+        private void launchSelectedTool()
+        {
             try
             {
                 Console.WriteLine("Selected item: " + moddingPath + "\\" + toolsDD.SelectedItem);
@@ -337,7 +439,6 @@ namespace DarkSoulsModManager
                 string toolPath = "";
                 foreach (string item in tools)
                 {
-                    Console.WriteLine(item);
                     // Rewrite generated paths to launch properly
                     if (item.Contains("exe") && !item.Contains("config"))
                     {
@@ -355,13 +456,22 @@ namespace DarkSoulsModManager
                 MessageBox.Show("Failed to launch because C# can't launch files with dots in their names");
             }
         }
+        #endregion
 
-        private void launchDS3_Click(object sender, EventArgs e)
+        private void launchGame_Click(object sender, EventArgs e)
         {
+            determineGame();
             try
             {
-                Console.WriteLine(ds3 + "/DARKSOULSIII");
-                Process.Start(ds3 + "/DARKSOULSIII");
+                string gameExe = "";
+                string[] gameFiles = Directory.GetFiles(game);
+                foreach (string file in gameFiles)
+                {
+                    if (file.Contains("exe") && !file.Contains("bak"))
+                        gameExe = file;
+                }
+
+                Process.Start(gameExe);
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -371,13 +481,34 @@ namespace DarkSoulsModManager
             }
         }
 
+        #region modengine
+
+        private void readModEngine()
+        {
+            foreach (string line in lines)
+            {
+                if (line.Contains("blockNetworkAccess"))
+                    blockLine = line;
+                if (line.Contains("loadLooseParams"))
+                    paramLine = line;
+                if (line.Contains("loadUXMFiles"))
+                    uxmLine = line;
+                if (line.Contains("useModOverrideDirectory"))
+                    overrideLine = line;
+                if (line.Contains("modOverrideDirectory="))
+                    overrideDirLine = line;
+                if (line.Contains("useAlternateSaveFile"))
+                    altSaveLine = line;
+            }
+        }
+
         private void viewModEngine_Click(object sender, EventArgs e)
         {
-            Console.WriteLine(game + "/modengine");
+            Console.WriteLine(game + "\\modengine");
             try
             {
                 //MessageBox.Show(text);
-                Process.Start(game + "/modengine.ini");
+                Process.Start(game + "\\modengine.ini");
             }
             catch (System.ComponentModel.Win32Exception)
             {
@@ -389,12 +520,22 @@ namespace DarkSoulsModManager
 
         private void blockNetworkAccess_Click(object sender, EventArgs e)
         {
+            readModEngine();
+            Console.WriteLine("Block line: " + blockLine);
             if (lines != null)
             {
-                if (lines[18].Contains("blockNetworkAccess=0"))
-                    lines[18] = "blockNetworkAccess=1";
-                else
-                    lines[18] = "blockNetworkAccess=0";
+                if (blockLine.Contains("0"))
+                    blockLine = "blockNetworkAccess=1";
+                else if (blockLine.Contains("1")) 
+                    blockLine = "blockNetworkAccess=0";
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("blockNetworkAccess"))
+                    {
+                        lines[i] = blockLine;
+                    }
+                }
 
                 text = string.Join("\n", lines);
                 File.WriteAllText(modengine, text);
@@ -409,17 +550,26 @@ namespace DarkSoulsModManager
 
         private void useAlternateSaveFile_Click(object sender, EventArgs e)
         {
+            readModEngine();
             if (lines != null)
             {
-                if (lines[25].Contains("useAlternateSaveFile=0"))
-                lines[25] = "useAlternateSaveFile=1";
-            else
-                lines[25] = "useAlternateSaveFile=0";
+                if (altSaveLine.Contains("useAlternateSaveFile=0"))
+                    altSaveLine = "useAlternateSaveFile=1";
+                else
+                    altSaveLine = "useAlternateSaveFile=0";
 
-            text = string.Join("\n", lines);
-            File.WriteAllText(modengine, text);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("useAlternateSaveFile"))
+                    {
+                        lines[i] = altSaveLine;
+                    }
+                }
 
-            colourModEngineButtons();
+                text = string.Join("\n", lines);
+                File.WriteAllText(modengine, text);
+
+                colourModEngineButtons();
             }
             else
             {
@@ -430,17 +580,26 @@ namespace DarkSoulsModManager
 
         private void loadLooseParams_Click(object sender, EventArgs e)
         {
+            readModEngine();
             if (lines != null)
             {
-                if (lines[31].Contains("loadLooseParams=0"))
-                lines[31] = "loadLooseParams=1";
-            else
-                lines[31] = "loadLooseParams=0";
+                if (paramLine.Contains("loadLooseParams=0"))
+                    paramLine = "loadLooseParams=1";
+                else
+                    paramLine = "loadLooseParams=0";
 
-            text = string.Join("\n", lines);
-            File.WriteAllText(modengine, text);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("loadLooseParams"))
+                    {
+                        lines[i] = paramLine;
+                    }
+                }
 
-            colourModEngineButtons();
+                text = string.Join("\n", lines);
+                File.WriteAllText(modengine, text);
+
+                colourModEngineButtons();
             }
             else
             {
@@ -451,14 +610,23 @@ namespace DarkSoulsModManager
 
         private void loadUXMFiles_Click(object sender, EventArgs e)
         {
+            readModEngine();
             if (lines != null)
             {
-                if (lines[35].Contains("loadUXMFiles=0"))
-                lines[35] = "loadUXMFiles=1";
+                if (uxmLine.Contains("loadUXMFiles=0"))
+                    uxmLine = "loadUXMFiles=1";
             else
-                lines[35] = "loadUXMFiles=0";
+                    uxmLine = "loadUXMFiles=0";
 
-            text = string.Join("\n", lines);
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("loadUXMFiles"))
+                    {
+                        lines[i] = uxmLine;
+                    }
+                }
+
+                text = string.Join("\n", lines);
             File.WriteAllText(modengine, text);
 
             colourModEngineButtons();
@@ -472,12 +640,21 @@ namespace DarkSoulsModManager
 
         private void useModOverrideDirectory_Click(object sender, EventArgs e)
         {
+            readModEngine();
             if (lines != null)
             {
-                if (lines[38].Contains("useModOverrideDirectory=0"))
-                    lines[38] = "useModOverrideDirectory=1";
+                if (overrideLine.Contains("useModOverrideDirectory=0"))
+                    overrideLine = "useModOverrideDirectory=1";
                 else
-                    lines[38] = "useModOverrideDirectory=0";
+                    overrideLine = "useModOverrideDirectory=0";
+
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    if (lines[i].Contains("useModOverrideDirectory"))
+                    {
+                        lines[i] = overrideLine;
+                    }
+                }
 
                 text = string.Join("\n", lines);
                 File.WriteAllText(modengine, text);
@@ -524,10 +701,21 @@ namespace DarkSoulsModManager
 
         private void changeActiveMod()
         {
+            readModEngine();
             // Change active mod
-            lines[41] = "modOverrideDirectory=\"\\" + activeMod.modName + "\"";
+            overrideDirLine = "modOverrideDirectory=\"\\" + activeMod.modName + "\"";
+            Console.WriteLine("Override: " + overrideDirLine);
 
-            string line41 = string.Join("", lines[41]);
+            string line41 = string.Join("", overrideDirLine);
+            Console.WriteLine("Line 41: " + line41);
+            for (int i=0; i<lines.Length; i++)
+            {
+                if (lines[i].Contains ("modOverrideDirectory="))
+                {
+                    lines[i] = overrideDirLine;
+                    Console.WriteLine("Override dir: " + lines[i]);
+                }
+            }
 
             text = string.Join("\n", lines);
             string trunc = line41.Substring(23);
@@ -535,5 +723,26 @@ namespace DarkSoulsModManager
             notificationLabel.Text = "Active mod changed to " + trunc.Trim(quotes);
             File.WriteAllText(modengine, text);
         }
+
+        private bool isModEngine()
+        {
+            return gamesDD.Text.Contains("DARK SOULS III") || gamesDD.Text.Contains("Sekiro");
+        }
+
+        private bool isUXM()
+        {
+            return gamesDD.Text.Contains("Scholar") || gamesDD.Text.Contains("Remastered");
+        }
+
+        private bool isME2()
+        {
+            return gamesDD.Text.Contains("Elden");
+        }
+
+        private bool isPTDE()
+        {
+            return gamesDD.Text.Contains("Die");
+        }
+        #endregion
     }
 }

@@ -196,7 +196,7 @@ namespace DarkSoulsModManager
             File.WriteAllText(gameTracker, game);
             Console.WriteLine("Game: " + game);
         }
-        
+
 
         private void updateModConfig_Click(object sender, EventArgs e)
         {
@@ -287,11 +287,13 @@ namespace DarkSoulsModManager
                 saveSpot = File.ReadAllText("save spot.txt");
                 Console.WriteLine("Save spot: " + saveSpot);
             }
-            if (File.Exists("backup dir.txt")) {
+            if (File.Exists("backup dir.txt"))
+            {
                 backupDir = File.ReadAllText("backup dir.txt");
                 Console.WriteLine("Backup dir: " + backupDir);
             }
-            if (File.Exists("backup spot.txt")) {
+            if (File.Exists("backup spot.txt"))
+            {
                 backupSpot = File.ReadAllText("backup spot.txt");
                 Console.WriteLine("Backup spot: " + backupSpot);
             }
@@ -310,9 +312,9 @@ namespace DarkSoulsModManager
             }
             else
             {
-                modList = game;
+                modList = steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2";
             }
-            if (File.Exists("me2 config.txt")) 
+            if (File.Exists("me2 config.txt"))
             {
                 webBrowser1.Url = new Uri(me2Config);
             }
@@ -354,7 +356,10 @@ namespace DarkSoulsModManager
                     foreach (string gameFile in gameFiles)
                     {
                         if (!mods.Contains(mod) && gameFile.Contains(fileName) && !dir.Contains("backup"))
+                        {
                             mods.Add(mod);
+                            Console.WriteLine(mod.modName);
+                        }
                     }
                 }
 
@@ -362,12 +367,6 @@ namespace DarkSoulsModManager
                 mod.modName = modTrimmed;
             }
 
-
-            // Point Elden Ring's mod config to available mods
-            foreach (Mod mod in mods)
-            {
-            }
-            
             // Save the chosen directory to file
             Console.ReadLine();
             dataGridView1.DataSource = mods;
@@ -395,7 +394,7 @@ namespace DarkSoulsModManager
                 this.dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
 
-            foreach(Mod mod in mods)
+            foreach (Mod mod in mods)
             {
                 if (mod.modName.Equals(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value))
                 {
@@ -414,7 +413,7 @@ namespace DarkSoulsModManager
             // Group up the mods in ME2's config file
             modLines = new List<string>();
             trueMods = new List<string>();
-            for (int i=0; i<lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
                 foreach (Mod mod in mods)
                 {
@@ -430,7 +429,7 @@ namespace DarkSoulsModManager
                         lines[i] = "    { enabled = true, name = \"" + mod.modName + "\", path = \"" + mod.modName + "\" },";
                         trueMods.Add(mod.modName);
                     }
-                    
+
                 }
             }
 
@@ -511,9 +510,10 @@ namespace DarkSoulsModManager
                         info.Attributes = FileAttributes.Normal;
                     }
                 }
-            } catch (UnauthorizedAccessException e)
+            }
+            catch (UnauthorizedAccessException e)
             {
-                foreach(string dir in Directory.GetDirectories(userPath))
+                foreach (string dir in Directory.GetDirectories(userPath))
                 {
                     DirectoryInfo info = new DirectoryInfo(dir);
                     info.Attributes = FileAttributes.Normal;

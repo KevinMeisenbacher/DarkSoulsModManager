@@ -163,7 +163,7 @@ namespace DarkSoulsModManager
         private void buildTable()
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
-            { Description = "Pick the drive Steam is in (C: for example) and click OK" })
+            { Description = "Navigate to the folder that has Steam and click OK" })
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
@@ -171,21 +171,19 @@ namespace DarkSoulsModManager
                     selectedDrive = fbd.SelectedPath;
                     string[] driveDirs = Directory.GetDirectories(selectedDrive);
                     string[] contents;
-                    foreach(string dir in driveDirs)
+                    foreach (string dir in driveDirs)
                     {
                         try
                         {
                             contents = Directory.GetDirectories(dir);
-                        } catch(System.UnauthorizedAccessException)
+                        }
+                        catch (System.UnauthorizedAccessException)
                         {
                             continue;
                         }
-                        foreach(string folder in contents)
+                        if (dir.Contains("Steam"))
                         {
-                            if (folder.Contains("Steam"))
-                            {
-                                steamLib = folder + @"\steamapps\common";
-                            }
+                            steamLib = dir + @"\steamapps\common";
                         }
                     }
 
@@ -222,7 +220,8 @@ namespace DarkSoulsModManager
                     modengine = game + @"\modengine.ini";
                     text = File.ReadAllText(modengine);
                     lines = File.ReadAllLines(modengine);
-                } catch (DirectoryNotFoundException)
+                }
+                catch (DirectoryNotFoundException)
                 {
                     MessageBox.Show("Whoops! Looks like you forgot to set the game's directory. Lemme get that for ya");
                     buildTable();
@@ -298,7 +297,8 @@ namespace DarkSoulsModManager
                 // Trim file extensions from mod names
                 mod.modName = modTrimmed;
 
-                if (isModEngine()) {
+                if (isModEngine())
+                {
                     if (overrideDirLine.Contains(mod.modName))
                     {
                         activeMod = mod;
@@ -354,7 +354,8 @@ namespace DarkSoulsModManager
             {
                 this.dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
-            if (isModEngine()) {
+            if (isModEngine())
+            {
 
                 // When a checkbox is clicked, change the active mod to the corresponding one
                 if ((bool)this.dataGridView1.CurrentCell.Value == true)
@@ -381,7 +382,8 @@ namespace DarkSoulsModManager
             initModdingTools();
         }
 
-        private void initModdingTools() {
+        private void initModdingTools()
+        {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             { Description = "Go to where your modding stuff is and click OK" })
             {
@@ -526,7 +528,7 @@ namespace DarkSoulsModManager
             {
                 if (blockLine.Contains("0"))
                     blockLine = "blockNetworkAccess=1";
-                else if (blockLine.Contains("1")) 
+                else if (blockLine.Contains("1"))
                     blockLine = "blockNetworkAccess=0";
 
                 for (int i = 0; i < lines.Length; i++)
@@ -541,7 +543,8 @@ namespace DarkSoulsModManager
                 File.WriteAllText(modengine, text);
 
                 colourModEngineButtons();
-            } else 
+            }
+            else
             {
                 MessageBox.Show("Lemme pull up the game dir picker so these buttons can actually do stuff with ModEngine");
                 buildTable();
@@ -615,7 +618,7 @@ namespace DarkSoulsModManager
             {
                 if (uxmLine.Contains("loadUXMFiles=0"))
                     uxmLine = "loadUXMFiles=1";
-            else
+                else
                     uxmLine = "loadUXMFiles=0";
 
                 for (int i = 0; i < lines.Length; i++)
@@ -627,9 +630,9 @@ namespace DarkSoulsModManager
                 }
 
                 text = string.Join("\n", lines);
-            File.WriteAllText(modengine, text);
+                File.WriteAllText(modengine, text);
 
-            colourModEngineButtons();
+                colourModEngineButtons();
             }
             else
             {
@@ -708,9 +711,9 @@ namespace DarkSoulsModManager
 
             string line41 = string.Join("", overrideDirLine);
             Console.WriteLine("Line 41: " + line41);
-            for (int i=0; i<lines.Length; i++)
+            for (int i = 0; i < lines.Length; i++)
             {
-                if (lines[i].Contains ("modOverrideDirectory="))
+                if (lines[i].Contains("modOverrideDirectory="))
                 {
                     lines[i] = overrideDirLine;
                     Console.WriteLine("Override dir: " + lines[i]);

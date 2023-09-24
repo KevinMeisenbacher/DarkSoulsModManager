@@ -19,13 +19,14 @@ namespace DarkSoulsModManager
 {
     public partial class ME2 : Form
     {
-        private string steamLib, game, selectedDrive, modengine, moddingPath, userPath;                                       // paths
+        private string steamLib, game, selectedDrive, modengine, moddingPath, modDirConfig, userPath;                         // paths
         private string saveDir, saveDirFile, saveSpot, saveSpotFile, backupDir, backupDirFile, backupSpot, backupSpotFile;    // Save backup
-        private string text, gameTracker, gameDirConfig, memory, me2, me2Config, me2File, modList, activeModList;             // string objects
+        private string text, gameTracker, gameDirConfig, memory, me2, me2Config, modTool, tool, modList, activeModList;       // string objects
         private string[] lines, dirs, moddingDir, modFiles, tools, games;                                                     // Line and file navigation
         private List<Mod> mods, activeMods, listedMods, unlistedMods;
 
         private List<String> gameFiles, trueMods, modLines, moddableGames;
+
         private Mod activeMod;
         private ModManager manager;
 
@@ -443,9 +444,93 @@ namespace DarkSoulsModManager
             File.WriteAllText(activeModList, modCache);
         }
 
+        private void GoBack_Click(object sender, EventArgs e)
+        {
+            webBrowser1.GoBack();
+        }
+
+        private void GoForward_Click(object sender, EventArgs e)
+        {
+            webBrowser1.GoForward();
+        }
         #endregion
 
-        #region saveBackup
+        #region moddingTools
+        private void pickModdingDirectory_Click(object sender, EventArgs e)
+        {
+            initModdingTools();
+        }
+
+        private void initModdingTools()
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog()
+            { Description = "Go to where your modding stuff is and click OK" })
+            {
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    // Pick the file path
+                    moddingPath = fbd.SelectedPath;
+                    // Get files in the dir's folders
+                    moddingDir = Directory.GetDirectories(fbd.SelectedPath);
+                    loadModdingTools();
+                }
+            }
+        }
+
+        private void loadModdingTools()
+        {
+            // Clear items to just keep modding tools in selected directory
+            toolsDD.Items.Clear();
+
+            // item is each folder in ModdingDir
+            foreach (string item in moddingDir)
+            {
+                modFiles = Directory.GetFiles(item);
+                // modFile is each file in modFiles
+                foreach (string modFile in modFiles)
+                {
+                    if (modFile.Contains("exe") && !modFile.Contains("config"))
+                        toolsDD.Items.Add(item.Substring(moddingPath.Length + 1));
+                }
+            }
+            modDirConfig = "mod dir config.txt";
+            File.WriteAllText(modDirConfig, moddingPath);
+        }
+
+        private void toolsDD_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            launchSelectedTool();
+        }
+
+        private void launchSelectedTool()
+        {
+            try
+            {
+                Console.WriteLine("Selected item: " + moddingPath + "\\" + toolsDD.SelectedItem);
+                tools = Directory.GetFiles(moddingPath + "\\" + toolsDD.SelectedItem);
+                string folderPath = "";
+                string toolPath = "";
+                foreach (string item in tools)
+                {
+                    // Rewrite generated paths to launch properly
+                    if (item.Contains("exe") && !item.Contains("config"))
+                    {
+                        folderPath = moddingPath + "\\" + toolsDD.SelectedItem + "\\";
+                        toolPath = item.Substring(0, item.Length - 4);
+                        tool = toolPath.Substring(folderPath.Length, toolPath.Length - folderPath.Length);
+                    }
+                }
+                modTool = folderPath + tool;
+                Console.WriteLine("Launching " + modTool);
+                Process.Start(modTool);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("Failed to launch because C# can't launch files with dots in their names");
+            }
+        }
+        #endregion
+
         private void navToME2_Click(object sender, EventArgs e)
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
@@ -467,6 +552,7 @@ namespace DarkSoulsModManager
             initializeTable();
         }
 
+        #region saveBackup
         private void navToSave_Click(object sender, EventArgs e)
         {
             navigateToSave();
@@ -498,6 +584,7 @@ namespace DarkSoulsModManager
                 } // end wizard
             } // end fbd
             saveDirFile = "save dir.txt";
+            File.WriteAllText(saveDirFile, saveDir);
             try
             {
                 foreach (string dir in Directory.GetDirectories(userPath))
@@ -531,7 +618,7 @@ namespace DarkSoulsModManager
                     }
                 }
             }
-            File.WriteAllText(saveSpot, "save spot.txt");
+            File.WriteAllText("save spot.txt", saveSpot);
             notificationLabel.Text = "Save data: " + saveSpot;
         }
 
@@ -551,7 +638,6 @@ namespace DarkSoulsModManager
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    Console.WriteLine("Setting backupDir: " + fbd.SelectedPath);
                     backupDir = fbd.SelectedPath;
                 }
             }
@@ -559,7 +645,7 @@ namespace DarkSoulsModManager
             backupDirFile = "backup dir.txt";
             backupSpotFile = "backup spot.txt";
             File.WriteAllText(backupDirFile, backupDir);
-            File.WriteAllText(backupSpotFile, backupSpot + @"\");
+            File.WriteAllText(backupSpotFile, backupDir + @"\" + "ER0000.sl2");
         }
 
         private void backup_Click(object sender, EventArgs e)
@@ -595,7 +681,7 @@ namespace DarkSoulsModManager
                 }
                 else
                 {
-                    backupSpot = backupDir + @"\\ER0000.sl2";
+                    backupSpot = backupDir + @"\ER0000.sl2";
                     navigateToBackup();
                 }
             }
@@ -605,20 +691,42 @@ namespace DarkSoulsModManager
 
         private void restore_Click(object sender, EventArgs e)
         {
-            backupSpot = backupDir + @"\ER0000.sl2";
             if (File.Exists("save spot.txt") && File.Exists("backup spot.txt"))
             {
-                if (File.Exists(saveSpot))
-                {
-                    DirectoryInfo info = new DirectoryInfo(saveSpot);
-                    info.Attributes = FileAttributes.Normal;
-                    File.Delete(saveSpot);
-                }
-                File.Copy(backupSpot, saveSpot);
-                notificationLabel.Text = "Backup restored to " + backupDir;
+                restoreSave();
             }
             else
+            {
                 navigateToSave();
+                restoreSave();
+            }
+        }
+
+        private void restoreSave()
+        {
+            if (File.Exists("backup dir.txt")) backupSpot = backupDir + @"\ER0000.sl2";
+
+            else
+            {
+                navigateToBackup();
+                backupSpot = backupDir + @"ER0000.sl2";
+            }
+
+            if (File.Exists(saveSpot))
+            {
+                DirectoryInfo info = new DirectoryInfo(saveSpot);
+                info.Attributes = FileAttributes.Normal;
+                File.Delete(saveSpot);
+            }
+            File.Copy(backupSpot, saveSpot);
+            notificationLabel.Text = "Backup restored to " + backupDir;
+        }
+        private void checkDrive_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Save dir: " + saveDir +
+                "\n" + "Save spot: " + saveSpot +
+                "\n" + "Backup dir: " + backupDir +
+                "\n" + "Backup spot: " + backupDir + @"\ER0000.sl2");
         }
         #endregion
 
@@ -643,12 +751,6 @@ namespace DarkSoulsModManager
         private void gamesDD_SelectedIndexChanged(object sender, EventArgs e)
         {
             determineGame();
-        }
-
-        private void checkDrive_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Save spot: " + saveSpot +
-                "\n" + "Backup spot: " + backupDir);
         }
 
         private void refresh_Click(object sender, EventArgs e)

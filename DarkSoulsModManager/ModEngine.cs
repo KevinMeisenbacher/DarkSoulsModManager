@@ -35,7 +35,7 @@ namespace DarkSoulsModManager
             //moddableGames.Add("DARK SOULS II Scholar of the First Sin");
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
-            moddableGames.Add("Elden Ring");
+            moddableGames.Add("ELDEN RING");
 
             // Array for figuring out if a folder is a mod
             gameFiles = new List<string>();
@@ -198,7 +198,7 @@ namespace DarkSoulsModManager
 
         private void determineGame()
         {
-            if (gamesDD.Text.Contains("DARK SOULS II") || gamesDD.Text.Contains("ELDEN"))
+            if (gamesDD.Text.Contains("DARK SOULS II"))
             {
                 //Console.WriteLine("GamesDD text: " + gamesDD.Text);
                 game = steamLib + "\\" + gamesDD.SelectedItem + "\\Game";
@@ -739,7 +739,7 @@ namespace DarkSoulsModManager
 
         private bool isME2()
         {
-            return gamesDD.Text.Contains("Elden");
+            return gamesDD.Text.Contains("ELDEN");
         }
 
         private bool isPTDE()

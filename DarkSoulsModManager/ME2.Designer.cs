@@ -50,21 +50,31 @@ namespace DarkSoulsModManager
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.updateModConfig = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.GoForward = new System.Windows.Forms.Button();
+            this.GoBack = new System.Windows.Forms.Button();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.openModDirWizard = new System.Windows.Forms.Button();
+            this.toolsDD = new System.Windows.Forms.ComboBox();
+            this.launchTool = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).BeginInit();
+            this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.Panel2.SuspendLayout();
+            this.splitContainer4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -91,7 +101,7 @@ namespace DarkSoulsModManager
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EnableHeadersVisualStyles = false;
             this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
@@ -112,7 +122,7 @@ namespace DarkSoulsModManager
             this.dataGridView1.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.Black;
             this.dataGridView1.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.dataGridView1.RowTemplate.Height = 28;
-            this.dataGridView1.Size = new System.Drawing.Size(489, 425);
+            this.dataGridView1.Size = new System.Drawing.Size(472, 430);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -121,9 +131,9 @@ namespace DarkSoulsModManager
             this.gamesDD.BackColor = System.Drawing.Color.Black;
             this.gamesDD.ForeColor = System.Drawing.Color.White;
             this.gamesDD.FormattingEnabled = true;
-            this.gamesDD.Location = new System.Drawing.Point(268, 2);
+            this.gamesDD.Location = new System.Drawing.Point(179, 2);
             this.gamesDD.Name = "gamesDD";
-            this.gamesDD.Size = new System.Drawing.Size(135, 26);
+            this.gamesDD.Size = new System.Drawing.Size(224, 26);
             this.gamesDD.TabIndex = 18;
             this.gamesDD.Text = "Game";
             this.gamesDD.SelectedIndexChanged += new System.EventHandler(this.gamesDD_SelectedIndexChanged);
@@ -132,7 +142,7 @@ namespace DarkSoulsModManager
             // 
             this.navToME2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.navToME2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navToME2.Location = new System.Drawing.Point(132, 6);
+            this.navToME2.Location = new System.Drawing.Point(308, 9);
             this.navToME2.Name = "navToME2";
             this.navToME2.Size = new System.Drawing.Size(96, 23);
             this.navToME2.TabIndex = 19;
@@ -144,9 +154,9 @@ namespace DarkSoulsModManager
             // 
             this.refresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.refresh.Location = new System.Drawing.Point(0, 3);
+            this.refresh.Location = new System.Drawing.Point(3, 2);
             this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(96, 23);
+            this.refresh.Size = new System.Drawing.Size(74, 23);
             this.refresh.TabIndex = 20;
             this.refresh.Text = "Refresh";
             this.refresh.UseVisualStyleBackColor = true;
@@ -177,9 +187,9 @@ namespace DarkSoulsModManager
             // 
             this.navToSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.navToSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navToSave.Location = new System.Drawing.Point(436, 6);
+            this.navToSave.Location = new System.Drawing.Point(3, 197);
             this.navToSave.Name = "navToSave";
-            this.navToSave.Size = new System.Drawing.Size(101, 23);
+            this.navToSave.Size = new System.Drawing.Size(159, 23);
             this.navToSave.TabIndex = 23;
             this.navToSave.Text = "Navigate to Save";
             this.navToSave.UseVisualStyleBackColor = true;
@@ -189,9 +199,9 @@ namespace DarkSoulsModManager
             // 
             this.backup.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.backup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.backup.Location = new System.Drawing.Point(115, 6);
+            this.backup.Location = new System.Drawing.Point(3, 75);
             this.backup.Name = "backup";
-            this.backup.Size = new System.Drawing.Size(101, 23);
+            this.backup.Size = new System.Drawing.Size(159, 23);
             this.backup.TabIndex = 24;
             this.backup.Text = "Backup Save";
             this.backup.UseVisualStyleBackColor = true;
@@ -201,9 +211,9 @@ namespace DarkSoulsModManager
             // 
             this.restore.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.restore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.restore.Location = new System.Drawing.Point(222, 6);
+            this.restore.Location = new System.Drawing.Point(3, 104);
             this.restore.Name = "restore";
-            this.restore.Size = new System.Drawing.Size(101, 23);
+            this.restore.Size = new System.Drawing.Size(159, 23);
             this.restore.TabIndex = 25;
             this.restore.Text = "Restore Save";
             this.restore.UseVisualStyleBackColor = true;
@@ -213,9 +223,9 @@ namespace DarkSoulsModManager
             // 
             this.checkDrive.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.checkDrive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkDrive.Location = new System.Drawing.Point(8, 6);
+            this.checkDrive.Location = new System.Drawing.Point(3, 12);
             this.checkDrive.Name = "checkDrive";
-            this.checkDrive.Size = new System.Drawing.Size(101, 23);
+            this.checkDrive.Size = new System.Drawing.Size(159, 23);
             this.checkDrive.TabIndex = 26;
             this.checkDrive.Text = "Check Saves";
             this.checkDrive.UseVisualStyleBackColor = true;
@@ -225,9 +235,9 @@ namespace DarkSoulsModManager
             // 
             this.navToBackup.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.navToBackup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.navToBackup.Location = new System.Drawing.Point(329, 6);
+            this.navToBackup.Location = new System.Drawing.Point(3, 168);
             this.navToBackup.Name = "navToBackup";
-            this.navToBackup.Size = new System.Drawing.Size(101, 23);
+            this.navToBackup.Size = new System.Drawing.Size(159, 23);
             this.navToBackup.TabIndex = 27;
             this.navToBackup.Text = "Navigate to Backup";
             this.navToBackup.UseVisualStyleBackColor = true;
@@ -237,7 +247,7 @@ namespace DarkSoulsModManager
             // 
             this.loadME2Btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.loadME2Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loadME2Btn.Location = new System.Drawing.Point(234, 6);
+            this.loadME2Btn.Location = new System.Drawing.Point(410, 9);
             this.loadME2Btn.Name = "loadME2Btn";
             this.loadME2Btn.Size = new System.Drawing.Size(101, 23);
             this.loadME2Btn.TabIndex = 28;
@@ -251,14 +261,14 @@ namespace DarkSoulsModManager
             this.webBrowser1.Location = new System.Drawing.Point(676, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(510, 425);
+            this.webBrowser1.Size = new System.Drawing.Size(510, 430);
             this.webBrowser1.TabIndex = 29;
             // 
             // updateModConfig
             // 
             this.updateModConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.updateModConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.updateModConfig.Location = new System.Drawing.Point(3, 6);
+            this.updateModConfig.Location = new System.Drawing.Point(179, 9);
             this.updateModConfig.Name = "updateModConfig";
             this.updateModConfig.Size = new System.Drawing.Size(123, 23);
             this.updateModConfig.TabIndex = 30;
@@ -275,38 +285,37 @@ namespace DarkSoulsModManager
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.dataGridView1);
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer4);
             this.splitContainer1.Panel1.Controls.Add(this.webBrowser1);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1186, 494);
-            this.splitContainer1.SplitterDistance = 425;
+            this.splitContainer1.Size = new System.Drawing.Size(1186, 500);
+            this.splitContainer1.SplitterDistance = 430;
             this.splitContainer1.TabIndex = 31;
             // 
-            // splitContainer2
+            // splitContainer4
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Left;
+            this.splitContainer4.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer4.Name = "splitContainer4";
             // 
-            // splitContainer2.Panel1
+            // splitContainer4.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.checkDrive);
-            this.splitContainer2.Panel1.Controls.Add(this.backup);
-            this.splitContainer2.Panel1.Controls.Add(this.restore);
-            this.splitContainer2.Panel1.Controls.Add(this.navToSave);
-            this.splitContainer2.Panel1.Controls.Add(this.navToBackup);
+            this.splitContainer4.Panel1.Controls.Add(this.navToSave);
+            this.splitContainer4.Panel1.Controls.Add(this.restore);
+            this.splitContainer4.Panel1.Controls.Add(this.navToBackup);
+            this.splitContainer4.Panel1.Controls.Add(this.backup);
+            this.splitContainer4.Panel1.Controls.Add(this.checkDrive);
             // 
-            // splitContainer2.Panel2
+            // splitContainer4.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.notificationLabel);
-            this.splitContainer2.Size = new System.Drawing.Size(662, 65);
-            this.splitContainer2.SplitterDistance = 32;
-            this.splitContainer2.TabIndex = 33;
+            this.splitContainer4.Panel2.Controls.Add(this.dataGridView1);
+            this.splitContainer4.Size = new System.Drawing.Size(642, 430);
+            this.splitContainer4.SplitterDistance = 166;
+            this.splitContainer4.TabIndex = 30;
             // 
             // splitContainer3
             // 
@@ -317,6 +326,8 @@ namespace DarkSoulsModManager
             // 
             // splitContainer3.Panel1
             // 
+            this.splitContainer3.Panel1.Controls.Add(this.GoForward);
+            this.splitContainer3.Panel1.Controls.Add(this.GoBack);
             this.splitContainer3.Panel1.Controls.Add(this.loadME2Btn);
             this.splitContainer3.Panel1.Controls.Add(this.navToME2);
             this.splitContainer3.Panel1.Controls.Add(this.updateModConfig);
@@ -326,16 +337,97 @@ namespace DarkSoulsModManager
             this.splitContainer3.Panel2.Controls.Add(this.refresh);
             this.splitContainer3.Panel2.Controls.Add(this.launchGame);
             this.splitContainer3.Panel2.Controls.Add(this.gamesDD);
-            this.splitContainer3.Size = new System.Drawing.Size(514, 65);
+            this.splitContainer3.Size = new System.Drawing.Size(514, 66);
             this.splitContainer3.SplitterDistance = 32;
             this.splitContainer3.TabIndex = 0;
+            // 
+            // GoForward
+            // 
+            this.GoForward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.GoForward.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.GoForward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GoForward.Location = new System.Drawing.Point(30, 4);
+            this.GoForward.Name = "GoForward";
+            this.GoForward.Size = new System.Drawing.Size(20, 20);
+            this.GoForward.TabIndex = 32;
+            this.GoForward.Text = ">";
+            this.GoForward.UseVisualStyleBackColor = false;
+            this.GoForward.Click += new System.EventHandler(this.GoForward_Click);
+            // 
+            // GoBack
+            // 
+            this.GoBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.GoBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.GoBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.GoBack.Location = new System.Drawing.Point(3, 4);
+            this.GoBack.Name = "GoBack";
+            this.GoBack.Size = new System.Drawing.Size(20, 20);
+            this.GoBack.TabIndex = 31;
+            this.GoBack.Text = "<";
+            this.GoBack.UseVisualStyleBackColor = false;
+            this.GoBack.Click += new System.EventHandler(this.GoBack_Click);
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.openModDirWizard);
+            this.splitContainer2.Panel1.Controls.Add(this.toolsDD);
+            this.splitContainer2.Panel1.Controls.Add(this.launchTool);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.notificationLabel);
+            this.splitContainer2.Size = new System.Drawing.Size(662, 66);
+            this.splitContainer2.SplitterDistance = 32;
+            this.splitContainer2.TabIndex = 33;
+            // 
+            // openModDirWizard
+            // 
+            this.openModDirWizard.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.openModDirWizard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.openModDirWizard.Location = new System.Drawing.Point(4, 6);
+            this.openModDirWizard.Name = "openModDirWizard";
+            this.openModDirWizard.Size = new System.Drawing.Size(124, 23);
+            this.openModDirWizard.TabIndex = 28;
+            this.openModDirWizard.Text = "Modding Directory";
+            this.openModDirWizard.UseVisualStyleBackColor = true;
+            this.openModDirWizard.Click += new System.EventHandler(this.pickModdingDirectory_Click);
+            // 
+            // toolsDD
+            // 
+            this.toolsDD.BackColor = System.Drawing.Color.Black;
+            this.toolsDD.ForeColor = System.Drawing.Color.White;
+            this.toolsDD.FormattingEnabled = true;
+            this.toolsDD.Location = new System.Drawing.Point(134, 6);
+            this.toolsDD.Name = "toolsDD";
+            this.toolsDD.Size = new System.Drawing.Size(329, 26);
+            this.toolsDD.TabIndex = 29;
+            this.toolsDD.Text = "Pick a modding tool here to launch it";
+            this.toolsDD.SelectedIndexChanged += new System.EventHandler(this.toolsDD_SelectedIndexChanged);
+            // 
+            // launchTool
+            // 
+            this.launchTool.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.launchTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.launchTool.Location = new System.Drawing.Point(469, 6);
+            this.launchTool.Name = "launchTool";
+            this.launchTool.Size = new System.Drawing.Size(94, 23);
+            this.launchTool.TabIndex = 30;
+            this.launchTool.Text = "Launch Tool";
+            this.launchTool.UseVisualStyleBackColor = true;
             // 
             // ME2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1186, 494);
+            this.ClientSize = new System.Drawing.Size(1186, 500);
             this.Controls.Add(this.splitContainer1);
             this.Font = new System.Drawing.Font("Garamond", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
@@ -349,15 +441,19 @@ namespace DarkSoulsModManager
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer4.Panel1.ResumeLayout(false);
+            this.splitContainer4.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
+            this.splitContainer4.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-            this.splitContainer3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -381,5 +477,11 @@ namespace DarkSoulsModManager
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.SplitContainer splitContainer4;
+        private System.Windows.Forms.Button GoForward;
+        private System.Windows.Forms.Button GoBack;
+        private System.Windows.Forms.Button openModDirWizard;
+        private System.Windows.Forms.ComboBox toolsDD;
+        private System.Windows.Forms.Button launchTool;
     }
 }

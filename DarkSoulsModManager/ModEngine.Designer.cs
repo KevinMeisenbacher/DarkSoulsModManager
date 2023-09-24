@@ -119,10 +119,10 @@
             // webBrowser1
             // 
             this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.webBrowser1.Location = new System.Drawing.Point(664, 0);
+            this.webBrowser1.Location = new System.Drawing.Point(676, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(522, 425);
+            this.webBrowser1.Size = new System.Drawing.Size(510, 425);
             this.webBrowser1.TabIndex = 6;
             // 
             // openModDirWizard
@@ -144,7 +144,7 @@
             this.toolsDD.FormattingEnabled = true;
             this.toolsDD.Location = new System.Drawing.Point(133, 3);
             this.toolsDD.Name = "toolsDD";
-            this.toolsDD.Size = new System.Drawing.Size(209, 26);
+            this.toolsDD.Size = new System.Drawing.Size(329, 26);
             this.toolsDD.TabIndex = 3;
             this.toolsDD.Text = "Pick a modding tool here to launch it";
             this.toolsDD.SelectedIndexChanged += new System.EventHandler(this.toolsDD_SelectedIndexChanged);
@@ -186,7 +186,7 @@
             // 
             this.launchDS3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.launchDS3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.launchDS3.Location = new System.Drawing.Point(271, 3);
+            this.launchDS3.Location = new System.Drawing.Point(164, 32);
             this.launchDS3.Name = "launchDS3";
             this.launchDS3.Size = new System.Drawing.Size(101, 23);
             this.launchDS3.TabIndex = 5;
@@ -200,19 +200,20 @@
             this.flowLayoutPanel4.Controls.Add(this.openModDirWizard);
             this.flowLayoutPanel4.Controls.Add(this.toolsDD);
             this.flowLayoutPanel4.Controls.Add(this.launchTool);
+            this.flowLayoutPanel4.Controls.Add(this.mergeMods);
             this.flowLayoutPanel4.Controls.Add(this.notificationLabel);
             this.flowLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Left;
             this.flowLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(490, 51);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(661, 51);
             this.flowLayoutPanel4.TabIndex = 15;
             // 
             // launchTool
             // 
             this.launchTool.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.launchTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.launchTool.Location = new System.Drawing.Point(348, 3);
+            this.launchTool.Location = new System.Drawing.Point(468, 3);
             this.launchTool.Name = "launchTool";
             this.launchTool.Size = new System.Drawing.Size(94, 23);
             this.launchTool.TabIndex = 8;
@@ -224,12 +225,12 @@
             // 
             this.flowLayoutPanel5.Controls.Add(this.selectPath);
             this.flowLayoutPanel5.Controls.Add(this.viewModEngine);
-            this.flowLayoutPanel5.Controls.Add(this.launchDS3);
             this.flowLayoutPanel5.Controls.Add(this.gamesDD);
+            this.flowLayoutPanel5.Controls.Add(this.launchDS3);
             this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(806, 0);
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(913, 0);
             this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(380, 51);
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(273, 51);
             this.flowLayoutPanel5.TabIndex = 16;
             // 
             // gamesDD
@@ -239,7 +240,7 @@
             this.gamesDD.FormattingEnabled = true;
             this.gamesDD.Location = new System.Drawing.Point(3, 32);
             this.gamesDD.Name = "gamesDD";
-            this.gamesDD.Size = new System.Drawing.Size(135, 26);
+            this.gamesDD.Size = new System.Drawing.Size(155, 26);
             this.gamesDD.TabIndex = 17;
             this.gamesDD.Text = "Game";
             this.gamesDD.SelectedIndexChanged += new System.EventHandler(this.gamesDD_SelectedIndexChanged);
@@ -341,7 +342,6 @@
             this.splitContainer1.Panel2.Controls.Add(this.GoForward);
             this.splitContainer1.Panel2.Controls.Add(this.refresh);
             this.splitContainer1.Panel2.Controls.Add(this.GoBack);
-            this.splitContainer1.Panel2.Controls.Add(this.mergeMods);
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel4);
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel5);
             this.splitContainer1.Size = new System.Drawing.Size(1186, 480);
@@ -353,7 +353,7 @@
             this.GoForward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.GoForward.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.GoForward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GoForward.Location = new System.Drawing.Point(690, 6);
+            this.GoForward.Location = new System.Drawing.Point(708, 0);
             this.GoForward.Name = "GoForward";
             this.GoForward.Size = new System.Drawing.Size(20, 20);
             this.GoForward.TabIndex = 20;
@@ -365,9 +365,9 @@
             // 
             this.refresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.refresh.Location = new System.Drawing.Point(742, 4);
+            this.refresh.Location = new System.Drawing.Point(682, 30);
             this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(61, 23);
+            this.refresh.Size = new System.Drawing.Size(74, 23);
             this.refresh.TabIndex = 18;
             this.refresh.Text = "Refresh";
             this.refresh.UseVisualStyleBackColor = true;
@@ -378,7 +378,7 @@
             this.GoBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.GoBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.GoBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.GoBack.Location = new System.Drawing.Point(664, 6);
+            this.GoBack.Location = new System.Drawing.Point(682, 0);
             this.GoBack.Name = "GoBack";
             this.GoBack.Size = new System.Drawing.Size(20, 20);
             this.GoBack.TabIndex = 19;
@@ -390,7 +390,7 @@
             // 
             this.mergeMods.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.mergeMods.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.mergeMods.Location = new System.Drawing.Point(570, 3);
+            this.mergeMods.Location = new System.Drawing.Point(568, 3);
             this.mergeMods.Name = "mergeMods";
             this.mergeMods.Size = new System.Drawing.Size(88, 23);
             this.mergeMods.TabIndex = 17;

@@ -15,7 +15,7 @@ namespace DarkSoulsModManager
 {
     public partial class ModEngine : Form
     {
-        private string ds3, steamLib, game, selectedDrive, modengine, moddingPath;                  // paths
+        private string steamLib, selectedDrive, game, selectedGame, modengine, moddingPath;         // paths
         private string text, gameTracker, gameDirConfig, modDirConfig, modTool, tool;               // string objects
         private string blockLine, paramLine, uxmLine, overrideLine, overrideDirLine, altSaveLine;   // Modengine lines
         private string[] lines, dirs, moddingDir, modFiles, tools, games;                           // Mostly file navimagation
@@ -36,6 +36,7 @@ namespace DarkSoulsModManager
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
             moddableGames.Add("ELDEN RING");
+            moddableGames.Add("ARMORED CORE VI");
 
             // Array for figuring out if a folder is a mod
             gameFiles = new List<string>();
@@ -170,12 +171,11 @@ namespace DarkSoulsModManager
                     // Automatically find Dark Souls 3's directory
                     selectedDrive = fbd.SelectedPath;
                     string[] driveDirs = Directory.GetDirectories(selectedDrive);
-                    string[] contents;
                     foreach (string dir in driveDirs)
                     {
                         try
                         {
-                            contents = Directory.GetDirectories(dir);
+                            string[] contents = Directory.GetDirectories(dir);
                         }
                         catch (System.UnauthorizedAccessException)
                         {
@@ -238,6 +238,7 @@ namespace DarkSoulsModManager
 
             else if (isME2())
             {
+                File.WriteAllText("selected game.txt", gamesDD.Text);
                 var me2 = new ME2();
                 me2.Location = this.Location;
                 me2.Show();
@@ -739,7 +740,7 @@ namespace DarkSoulsModManager
 
         private bool isME2()
         {
-            return gamesDD.Text.Contains("ELDEN");
+            return gamesDD.Text.Contains("ELDEN") || gamesDD.Text.Contains("ARMORED");
         }
 
         private bool isPTDE()

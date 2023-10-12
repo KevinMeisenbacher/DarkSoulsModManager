@@ -114,9 +114,9 @@ namespace DarkSoulsModManager
                 {
                     if (dir.Contains(mod.modName))
                     {
-                        //CopyFilesRecursively(dir, folderName);
+                        CopyFilesRecursively(dir, folderName);
                         queuedDirs.Add(dir);
-                        MergeFiles();
+                        //MergeFiles();
                     }
                 }
             }

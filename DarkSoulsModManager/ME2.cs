@@ -19,14 +19,14 @@ namespace DarkSoulsModManager
 {
     public partial class ME2 : Form
     {
-        private string steamLib, game, selectedDrive, modengine, moddingPath, modDirConfig, userPath;                         // paths
+        private string steamLib, selectedDrive, game, selectedGame, gameSave, moddingPath, modDirConfig, userPath;            // paths
         private string saveDir, saveDirFile, saveSpot, saveSpotFile, backupDir, backupDirFile, backupSpot, backupSpotFile;    // Save backup
-        private string text, gameTracker, gameDirConfig, memory, me2, me2Config, modTool, tool, modList, activeModList;       // string objects
+        private string text, gameTracker, gameConfig, memory, me2, me2Config, modTool, tool, modList, activeModList;          // string objects
         private string[] lines, dirs, moddingDir, modFiles, tools, games;                                                     // Line and file navigation
         private List<Mod> mods, activeMods, listedMods, unlistedMods;
 
         private List<String> gameFiles, trueMods, modLines, moddableGames;
-
+        private List<Button> buttons;
         private Mod activeMod;
         private ModManager manager;
 
@@ -36,6 +36,9 @@ namespace DarkSoulsModManager
             InitializeComponent();
             loadTooltips();
 
+            trueMods = new List<string>();
+            activeMods = new List<Mod>();
+
             // Populate gamesDD with moddable games
             moddableGames = new List<string>();
             //moddableGames.Add("Dark Souls Prepare to Die Edition");
@@ -44,9 +47,11 @@ namespace DarkSoulsModManager
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
             moddableGames.Add("ELDEN RING");
+            moddableGames.Add("ARMORED CORE VI");
 
             // Set the selected game in GamesDD to Elden Ring
-            gamesDD.SelectedItem = "ELDEN RING";
+            //gamesDD.SelectedItem = "ELDEN RING";
+            determineGame();
 
             // Array for figuring out if a folder is a mod
             gameFiles = new List<string>();
@@ -61,26 +66,6 @@ namespace DarkSoulsModManager
             gameFiles.Add("param");
             gameFiles.Add("parts");
             gameFiles.Add("sound");
-
-            // Load mods
-            if (File.Exists("me2 config.txt"))
-            {
-                me2Config = "me2 config.txt";
-                activeModList = "active mod list.txt";
-                me2 = File.ReadAllText(me2Config) + @"\config_eldenring.toml";
-                lines = File.ReadAllLines(me2);
-                moddingPath = File.ReadAllText(me2Config);
-                moddingDir = Directory.GetDirectories(moddingPath);
-                activeMods = new List<Mod>();
-                listedMods = new List<Mod>();
-                unlistedMods = new List<Mod>();
-                modLines = new List<string>();
-                //loadModdingTools();
-            }
-            else
-            {
-                moddingPath = "";
-            }
 
             // Load games
             foreach (string item in moddableGames)
@@ -100,17 +85,18 @@ namespace DarkSoulsModManager
                     continue;
                 }
             }
-            //Console.WriteLine(gamesDD.SelectedItem);
 
-            if (File.Exists("game dir config.txt"))
+            // Initialize active mods
+            if (File.Exists("active mod list.txt"))
             {
-                steamLib = File.ReadAllText("game dir config.txt");
-                initializeTable();
+                activeModList = File.ReadAllText("active mod list.txt");
             }
             else
             {
-                steamLib = "";
+                File.WriteAllText("active mod list.txt", "");
+                activeModList = File.ReadAllText("active mod list.txt");
             }
+            initializeTable();
 
             dataGridView1.AllowUserToResizeRows = true;
         }
@@ -145,7 +131,7 @@ namespace DarkSoulsModManager
             refreshToolTip.SetToolTip(this.refresh, "Reloads the table with fresh information!");
 
             ToolTip updateToolTip = new ToolTip();
-            updateToolTip.SetToolTip(this.updateModConfig, "Update the mod list in the config_eldenring_toml. ONLY click this when you add new mods!");
+            updateToolTip.SetToolTip(this.updateModConfig, "Update the mod list in the config file. ONLY click this when you add new mods!");
         }
 
         private void determineGame()
@@ -161,6 +147,20 @@ namespace DarkSoulsModManager
             else
             {
                 game = steamLib + "\\" + gamesDD.Text;
+            }
+
+            // Detect whether Elden Ring or Armoured Core is selected
+            if (gamesDD.Text.Contains("ARMORED"))
+            {
+                gameConfig = @"\config_armoredcore6.toml";
+                selectedGame = @"\ArmoredCoreVI";
+                gameSave = @"\AC0000.sl2";
+            }
+            else
+            {
+                gameConfig = @"\config_eldenring.toml";
+                selectedGame = @"\EldenRing";
+                gameSave = @"\ER0000.sl2";
             }
 
             // Setup ability to parse modengine.ini
@@ -184,18 +184,17 @@ namespace DarkSoulsModManager
             {
                 if (File.Exists("me2 config.txt"))
                 {
-                    me2 = File.ReadAllText("me2 config.txt") + "\\" + "config_eldenring.toml";
+                    me2 = File.ReadAllText("me2 config.txt") + "\\" + gameConfig;
                 }
                 else
                 {
-                    me2 = steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2" + "config_eldenring.toml";
+                    me2 = steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2" + gameConfig;
                 }
             }
 
             // Remember what game the mod manager is on
             gameTracker = "game tracker.txt";
             File.WriteAllText(gameTracker, game);
-            Console.WriteLine("Game: " + game);
         }
 
 
@@ -273,6 +272,7 @@ namespace DarkSoulsModManager
             unlistedMods.Clear();
             listedMods.Clear();
         }
+
         private void initializeTable()
         {
             notificationLabel.Text = "";
@@ -281,43 +281,69 @@ namespace DarkSoulsModManager
             if (File.Exists("save dir.txt"))
             {
                 saveDir = File.ReadAllText("save dir.txt");
-                Console.WriteLine("Save dir: " + saveDir);
             }
             if (File.Exists("save spot.txt"))
             {
                 saveSpot = File.ReadAllText("save spot.txt");
-                Console.WriteLine("Save spot: " + saveSpot);
             }
             if (File.Exists("backup dir.txt"))
             {
                 backupDir = File.ReadAllText("backup dir.txt");
-                Console.WriteLine("Backup dir: " + backupDir);
             }
             if (File.Exists("backup spot.txt"))
             {
                 backupSpot = File.ReadAllText("backup spot.txt");
-                Console.WriteLine("Backup spot: " + backupSpot);
             }
 
             // Load game
             if (gamesDD.Text.Contains("Game"))
-                gamesDD.SelectedItem = "ELDEN RING";
+                gamesDD.Text = File.ReadAllText("selected game.txt");
             determineGame();
+
+            // Load mods
+            if (File.Exists("me2 config.txt"))
+            {
+                me2Config = "me2 config.txt";
+
+                if (File.Exists("game dir config.txt"))
+                {
+                    steamLib = File.ReadAllText("game dir config.txt");
+                }
+                else
+                {
+                    steamLib = "";
+                }
+                File.WriteAllText(me2Config, steamLib + @"\" + gamesDD.Text + @"\Mod Engine 2");
+                me2 = File.ReadAllText(me2Config) + gameConfig;
+                lines = File.ReadAllLines(me2);
+                moddingPath = File.ReadAllText(me2Config);
+                moddingDir = Directory.GetDirectories(moddingPath);
+                activeMods = new List<Mod>();
+                listedMods = new List<Mod>();
+                unlistedMods = new List<Mod>();
+                modLines = new List<string>();
+                //loadModdingTools();
+            }
+            else
+            {
+                moddingPath = "";
+            }
 
             // Load mods
             mods = new List<Mod>();
             if (File.Exists("me2 config.txt"))
             {
                 me2Config = File.ReadAllText("me2 config.txt");
-                modList = File.ReadAllText("me2 config.txt");
             }
             else
             {
-                modList = steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2";
+                File.WriteAllText("me2 config.txt", steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2");
+                me2Config = File.ReadAllText("me2 config.txt");
             }
+            modList = steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2";
             if (File.Exists("me2 config.txt"))
             {
-                webBrowser1.Url = new Uri(me2Config);
+                webBrowser1.Url = new Uri(modList);
             }
             else
             {
@@ -331,13 +357,18 @@ namespace DarkSoulsModManager
 
             // These 2 things will be used to trim file extensions
             string modTrimmed;
-            Console.WriteLine(modList);
 
             foreach (string dir in dirs)
             {
                 // Add mods by checking if their extension is whatever zip a mod would be
                 Mod mod = new Mod();
                 modTrimmed = dir.Substring(modTrim + 1);
+
+                // Forcing Armoured Core mods to be added because regular code doesn't work for some reason even though format still respects my conventions
+                if (gamesDD.Text.Contains("ARMORED"))
+                {
+                    mods.Add(mod);
+                }
 
                 // Filter to folders that contain mod files
                 string[] modFolders = Directory.GetDirectories(dir);
@@ -348,7 +379,10 @@ namespace DarkSoulsModManager
                     foreach (string gameFile in gameFiles)
                     {
                         if (!mods.Contains(mod) && gameFile.Contains(folderName) && !dir.Contains("backup"))
+                        {
+                            Console.WriteLine(folderName);
                             mods.Add(mod);
+                        }
                     }
                 }
                 foreach (string file in modFiles)
@@ -358,8 +392,8 @@ namespace DarkSoulsModManager
                     {
                         if (!mods.Contains(mod) && gameFile.Contains(fileName) && !dir.Contains("backup"))
                         {
+                            Console.WriteLine(fileName);
                             mods.Add(mod);
-                            Console.WriteLine(mod.modName);
                         }
                     }
                 }
@@ -368,14 +402,64 @@ namespace DarkSoulsModManager
                 mod.modName = modTrimmed;
             }
 
+            // Update active mods
+            foreach (Mod mod in mods)
+            {
+                if (File.ReadAllText("active mod list.txt").Contains(mod.modName) && !activeMods.Contains(mod))
+                {
+                    activeMods.Add(mod);
+                }
+            }
+
+            if (File.Exists("active mod list.txt"))
+            {
+                activeModList = File.ReadAllText("active mod list.txt");
+                foreach (Mod mod in mods)
+                {
+                    if (activeModList.Contains(mod.modName))
+                    {
+                        mod.active = true;
+                    }
+                }
+            }
+
+            // Read ME2's config
+            lines = File.ReadAllLines(me2);
+
             // Save the chosen directory to file
             Console.ReadLine();
             dataGridView1.DataSource = mods;
             dataGridView1.AutoResizeColumns();
         }
+
+        private void gamesDD_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            determineGame();
+            initializeTable();
+        }
         #endregion
 
         #region me2
+        private void navToME2_Click(object sender, EventArgs e)
+        {
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog()
+            {
+                Description = "Navigate to where Mod Engine 2 is and click OK",
+                SelectedPath = game
+            })
+            {
+                Console.WriteLine("Selected drive: " + game);
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    selectedDrive = fbd.SelectedPath;
+                    modList = selectedDrive;
+                }
+            }
+
+            me2Config = "me2 config.txt";
+            File.WriteAllText(me2Config, modList);
+            initializeTable();
+        }
 
         private void loadME2Btn_Click(object sender, EventArgs e)
         {
@@ -384,7 +468,6 @@ namespace DarkSoulsModManager
         private void loadME2()
         {
             Process.Start(me2);
-            Console.WriteLine("me2 path: " + me2);
         }
 
         // Code when a checkbox is clicked
@@ -399,10 +482,16 @@ namespace DarkSoulsModManager
             {
                 if (mod.modName.Equals(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value))
                 {
-                    if (!activeMods.Contains(mod))
+                    if ((bool)this.dataGridView1.CurrentCell.Value == true)
+                    {
                         activeMods.Add(mod);
+                        Console.WriteLine(mod.modName + " added");
+                    }
                     else
+                    {
                         activeMods.Remove(mod);
+                        Console.WriteLine(mod.modName + " removed");
+                    }
                     tickMod();
                 }
             }
@@ -413,7 +502,6 @@ namespace DarkSoulsModManager
         {
             // Group up the mods in ME2's config file
             modLines = new List<string>();
-            trueMods = new List<string>();
             for (int i = 0; i < lines.Length; i++)
             {
                 foreach (Mod mod in mods)
@@ -434,14 +522,18 @@ namespace DarkSoulsModManager
                 }
             }
 
-            // Update Elden Ring's mod config
+            // Update selected game's mod config
             text = string.Join("\n", lines);
             Console.WriteLine("Saving to " + me2);
             File.WriteAllText(me2, text);
 
             // Save active mods
+            foreach (Mod mod in activeMods)
+            {
+                trueMods.Add(mod.modName);
+            }
             string modCache = string.Join("\n", trueMods);
-            File.WriteAllText(activeModList, modCache);
+            File.WriteAllText("active mod list.txt", modCache);
         }
 
         private void GoBack_Click(object sender, EventArgs e)
@@ -531,27 +623,6 @@ namespace DarkSoulsModManager
         }
         #endregion
 
-        private void navToME2_Click(object sender, EventArgs e)
-        {
-            using (FolderBrowserDialog fbd = new FolderBrowserDialog()
-            {
-                Description = "Navigate to where Mod Engine 2 is and click OK",
-                SelectedPath = game
-            })
-            {
-                Console.WriteLine("Selected drive: " + game);
-                if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    selectedDrive = fbd.SelectedPath;
-                    modList = selectedDrive;
-                }
-            }
-
-            me2Config = "me2 config.txt";
-            File.WriteAllText(me2Config, modList);
-            initializeTable();
-        }
-
         #region saveBackup
         private void navToSave_Click(object sender, EventArgs e)
         {
@@ -560,6 +631,7 @@ namespace DarkSoulsModManager
 
         private void navigateToSave()
         {
+            determineGame();
             // Navigate to save
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             {
@@ -570,7 +642,7 @@ namespace DarkSoulsModManager
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     userPath = fbd.SelectedPath;
-                    saveDir = userPath + "\\AppData\\Roaming\\EldenRing";
+                    saveDir = userPath + "\\AppData\\Roaming" + selectedGame;
                     foreach (string dir in Directory.GetDirectories(saveDir))
                     {
                         foreach (string file in Directory.GetFiles(dir))
@@ -583,6 +655,7 @@ namespace DarkSoulsModManager
                     }
                 } // end wizard
             } // end fbd
+
             saveDirFile = "save dir.txt";
             File.WriteAllText(saveDirFile, saveDir);
             try
@@ -629,6 +702,7 @@ namespace DarkSoulsModManager
 
         private void navigateToBackup()
         {
+            determineGame();
             // Pick a backup spot
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             {
@@ -645,11 +719,12 @@ namespace DarkSoulsModManager
             backupDirFile = "backup dir.txt";
             backupSpotFile = "backup spot.txt";
             File.WriteAllText(backupDirFile, backupDir);
-            File.WriteAllText(backupSpotFile, backupDir + @"\" + "ER0000.sl2");
+            File.WriteAllText(backupSpotFile, backupDir + gameSave);
         }
 
         private void backup_Click(object sender, EventArgs e)
         {
+            determineGame();
             if (File.Exists("save spot.txt"))
             {
                 if (File.Exists("backup spot.txt"))
@@ -671,17 +746,17 @@ namespace DarkSoulsModManager
                         {
                             DirectoryInfo info = new DirectoryInfo(backupDir);
                             info.Attributes = FileAttributes.Normal;
-                            File.Delete(backupDir + @"\ER0000.sl2");
+                            File.Delete(backupDir + gameSave);
                         }
 
                         // Copy save file to backup
-                        File.Copy(saveSpot, backupDir + @"\ER0000.sl2");
+                        File.Copy(saveSpot, backupDir + gameSave);
                         notificationLabel.Text = "Save file " + saveSpot + " backed up to " + backupDir;
                     }
                 }
                 else
                 {
-                    backupSpot = backupDir + @"\ER0000.sl2";
+                    backupSpot = backupDir + gameSave;
                     navigateToBackup();
                 }
             }
@@ -704,12 +779,13 @@ namespace DarkSoulsModManager
 
         private void restoreSave()
         {
-            if (File.Exists("backup dir.txt")) backupSpot = backupDir + @"\ER0000.sl2";
+            determineGame();
+            if (File.Exists("backup dir.txt")) backupSpot = backupDir + gameSave;
 
             else
             {
                 navigateToBackup();
-                backupSpot = backupDir + @"ER0000.sl2";
+                backupSpot = backupDir + gameSave;
             }
 
             if (File.Exists(saveSpot))
@@ -726,7 +802,7 @@ namespace DarkSoulsModManager
             MessageBox.Show("Save dir: " + saveDir +
                 "\n" + "Save spot: " + saveSpot +
                 "\n" + "Backup dir: " + backupDir +
-                "\n" + "Backup spot: " + backupDir + @"\ER0000.sl2");
+                "\n" + "Backup spot: " + backupDir + gameSave);
         }
         #endregion
 
@@ -748,11 +824,6 @@ namespace DarkSoulsModManager
         #endregion
 
         #region infoAndMaintenance
-        private void gamesDD_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            determineGame();
-        }
-
         private void refresh_Click(object sender, EventArgs e)
         {
             initializeTable();
@@ -778,7 +849,7 @@ namespace DarkSoulsModManager
 
         private bool isME2()
         {
-            return gamesDD.Text.Contains("ELDEN");
+            return gamesDD.Text.Contains("ELDEN") || gamesDD.Text.Contains("ARMORED");
         }
 
         private bool isPTDE()

@@ -44,6 +44,7 @@
             this.launchDS3 = new System.Windows.Forms.Button();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.launchTool = new System.Windows.Forms.Button();
+            this.mergeMods = new System.Windows.Forms.Button();
             this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
             this.gamesDD = new System.Windows.Forms.ComboBox();
             this.loadLooseParams = new System.Windows.Forms.Button();
@@ -57,7 +58,6 @@
             this.GoForward = new System.Windows.Forms.Button();
             this.refresh = new System.Windows.Forms.Button();
             this.GoBack = new System.Windows.Forms.Button();
-            this.mergeMods = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.flowLayoutPanel4.SuspendLayout();
             this.flowLayoutPanel5.SuspendLayout();
@@ -220,6 +220,18 @@
             this.launchTool.Text = "Launch Tool";
             this.launchTool.UseVisualStyleBackColor = true;
             this.launchTool.Click += new System.EventHandler(this.launchTool_Click);
+            // 
+            // mergeMods
+            // 
+            this.mergeMods.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.mergeMods.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mergeMods.Location = new System.Drawing.Point(568, 3);
+            this.mergeMods.Name = "mergeMods";
+            this.mergeMods.Size = new System.Drawing.Size(88, 23);
+            this.mergeMods.TabIndex = 17;
+            this.mergeMods.Text = "Merge Mods";
+            this.mergeMods.UseVisualStyleBackColor = true;
+            this.mergeMods.Click += new System.EventHandler(this.mergeMods_Click);
             // 
             // flowLayoutPanel5
             // 
@@ -385,18 +397,6 @@
             this.GoBack.Text = "<";
             this.GoBack.UseVisualStyleBackColor = false;
             this.GoBack.Click += new System.EventHandler(this.GoBack_Click);
-            // 
-            // mergeMods
-            // 
-            this.mergeMods.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.mergeMods.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.mergeMods.Location = new System.Drawing.Point(568, 3);
-            this.mergeMods.Name = "mergeMods";
-            this.mergeMods.Size = new System.Drawing.Size(88, 23);
-            this.mergeMods.TabIndex = 17;
-            this.mergeMods.Text = "Merge Mods";
-            this.mergeMods.UseVisualStyleBackColor = true;
-            this.mergeMods.Click += new System.EventHandler(this.mergeMods_Click);
             // 
             // ModEngine
             // 

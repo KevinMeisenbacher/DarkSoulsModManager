@@ -200,9 +200,19 @@ namespace DarkSoulsModManager
 
         private void updateModConfig_Click(object sender, EventArgs e)
         {
+            // Set up a target line to inject mods into within the config.toml
+            string target = "";
+            foreach (string line in File.ReadAllLines(me2))
+            {
+                if (line.Contains("mods = [") && !line.Contains("#"))
+                {
+                    target = line;
+                }
+            }
             // Pre-tick active mods
             foreach (Mod mod in mods)
             {
+
                 foreach (string line in File.ReadAllLines(me2))
                 {
                     if (line.Contains(mod.modName))
@@ -216,30 +226,30 @@ namespace DarkSoulsModManager
                         }
                     }
                 }
-                // Automatically add lines to eldenring_config.toml
+                // Automatically add lines to config.toml
                 if (!listedMods.Contains(mod))
                 {
                     unlistedMods.Add(mod);
                     string[] newLines = new string[lines.Length + 1];
 
-                    for (int i = 0; i < 29; i++)
-                    {
-                        newLines[i] = lines[i];
-                    }
+                    //for (int i = 0; i < 29; i++)
+                    //{
+                    //    newLines[i] = lines[i];
+                    //}
 
-                    if (!newLines.Contains(mod.modName))
-                        newLines[29] = "    { enabled = false, name = \"" + mod.modName + "\", path = \"" + mod.modName + "\" },";
+                    //if (!newLines.Contains(mod.modName))
+                    //    newLines[29] = "    { enabled = false, name = \"" + mod.modName + "\", path = \"" + mod.modName + "\" },";
 
-                    for (int i = 30; i < newLines.Length; i++)
-                    {
-                        newLines[i] = lines[i - 1];
-                    }
+                    //for (int i = 30; i < newLines.Length; i++)
+                    //{
+                    //    newLines[i] = lines[i - 1];
+                    //}
 
-                    Array.Resize(ref lines, lines.Length + 1);
-                    for (int i = 0; i < newLines.Length; i++)
-                    {
-                        lines[i] = newLines[i];
-                    }
+                    //Array.Resize(ref lines, lines.Length + 1);
+                    //for (int i = 0; i < newLines.Length; i++)
+                    //{
+                    //    lines[i] = newLines[i];
+                    //}
                 }
             }
 

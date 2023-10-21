@@ -37,7 +37,7 @@ namespace DarkSoulsModManager
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
             moddableGames.Add("ELDEN RING");
-            moddableGames.Add("ARMORED CORE VI");
+            moddableGames.Add("ARMORED CORE VI FIRES OF RUBICON");
 
             // Array for figuring out if a folder is a mod
             gameFiles = new List<string>();

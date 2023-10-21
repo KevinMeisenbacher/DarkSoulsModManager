@@ -47,7 +47,7 @@ namespace DarkSoulsModManager
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
             moddableGames.Add("ELDEN RING");
-            moddableGames.Add("ARMORED CORE VI");
+            moddableGames.Add("ARMORED CORE VI FIRES OF RUBICON");
 
             determineGame();
 
@@ -196,8 +196,8 @@ namespace DarkSoulsModManager
             if (gamesDD.Text.Contains("ARMORED"))
             {
                 gameConfig = @"\config_armoredcore6.toml";
-                selectedGame = "ARMORED CORE VI";
-                gameSaveDir = @"\ArmoredCoreVI";
+                selectedGame = "ARMORED CORE VI FIRES OF RUBICON";
+                gameSaveDir = @"\ArmoredCore6";
                 gameSave = @"\AC0000.sl2";
             }
             else if (gamesDD.Text.Contains("ELDEN"))

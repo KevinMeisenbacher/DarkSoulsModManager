@@ -27,6 +27,7 @@ namespace DarkSoulsModManager
         public ModEngine()
         {
             InitializeComponent();
+            loadToolTips();
 
             // Populate gamesDD with moddable games
             moddableGames = new List<string>();
@@ -59,7 +60,6 @@ namespace DarkSoulsModManager
                 moddingPath = File.ReadAllText(modDirConfig);
                 moddingDir = Directory.GetDirectories(moddingPath);
                 loadModdingTools();
-                loadToolTips();
             }
             else
             {
@@ -84,12 +84,10 @@ namespace DarkSoulsModManager
                     continue;
                 }
             }
-            //Console.WriteLine(gamesDD.SelectedItem);
 
             if (File.Exists("game dir config.txt"))
             {
                 steamLib = File.ReadAllText("game dir config.txt");
-                initializeTable();
             }
             else
             {
@@ -97,6 +95,8 @@ namespace DarkSoulsModManager
             }
 
             dataGridView1.AllowUserToResizeRows = true;
+            if (File.Exists("selected game.txt"))
+                initializeTable();
         }
 
         private void loadToolTips()
@@ -136,8 +136,8 @@ namespace DarkSoulsModManager
             ToolTip toolsDDToolTip = new ToolTip();
             toolsDDToolTip.SetToolTip(this.toolsDD, "Automatically launches whatever tool is selected");
 
-            ToolTip launchModdingToolToolTip = new ToolTip();
-            launchModdingToolToolTip.SetToolTip(this.launchTool, "Click here to launch the selected modding tool");
+            ToolTip launchToolToolTip = new ToolTip();
+            launchToolToolTip.SetToolTip(this.launchTool, "Click here to launch the selected modding tool");
 
             ToolTip mergeToolTip = new ToolTip();
             mergeToolTip.SetToolTip(this.mergeMods, "Opens up a menu for mod merging. In beta and works, but gameplay mods will overwrite each other");
@@ -154,6 +154,9 @@ namespace DarkSoulsModManager
 
             ToolTip gamesDDToolTip = new ToolTip();
             gamesDDToolTip.SetToolTip(this.gamesDD, "Pick a game to manage");
+
+            ToolTip launchGameToolTip = new ToolTip();
+            launchGameToolTip.SetToolTip(this.launchTool, "Launches ther game!");
         }
 
         private void selectPath_Click(object sender, EventArgs e)
@@ -200,7 +203,6 @@ namespace DarkSoulsModManager
         {
             if (gamesDD.Text.Contains("DARK SOULS II"))
             {
-                //Console.WriteLine("GamesDD text: " + gamesDD.Text);
                 game = steamLib + "\\" + gamesDD.SelectedItem + "\\Game";
             }
             else if (gamesDD.Text.Contains("Die"))
@@ -238,11 +240,26 @@ namespace DarkSoulsModManager
 
             else if (isME2())
             {
-                File.WriteAllText("selected game.txt", gamesDD.Text);
-                var me2 = new ME2();
-                me2.Location = this.Location;
-                me2.Show();
-                this.Hide();
+                if (!File.Exists("game dir config.txt"))
+                    buildTable();
+                else
+                {
+                    File.WriteAllText("me2 game.txt", gamesDD.Text);
+                    var me2 = new ME2();
+                    me2.Location = this.Location;
+                    me2.Show();
+                    this.Hide();
+                }
+            }
+
+            // Detect whether Dark Souls 3 or Sekiro is selected
+            if (gamesDD.Text.Contains("DARK SOULS III"))
+            {
+                selectedGame = "DARK SOULS III";
+            }
+            else if (gamesDD.Text.Contains("Sekiro"))
+            {
+                selectedGame = "Sekiro";
             }
 
             // Remember what game the mod manager is on
@@ -258,9 +275,14 @@ namespace DarkSoulsModManager
 
         private void initializeTable()
         {
-            if (gamesDD.Text.Contains("Game"))
-                gamesDD.SelectedItem = "DARK SOULS III";
             determineGame();
+            if (gamesDD.Text.Contains("Game"))
+            {
+                if (File.Exists("selected game.txt"))
+                    gamesDD.Text = File.ReadAllText("selected game.txt");
+                else
+                    gamesDD.Text = "DARK SOULS III";
+            }
             if (isModEngine())
                 readModEngine();
 
@@ -315,6 +337,10 @@ namespace DarkSoulsModManager
 
             if (isModEngine())
                 colourModEngineButtons();
+
+            // Save the selected game
+            if (isModEngine())
+                File.WriteAllText("selected game.txt", gamesDD.Text);
         }
 
         private void launchTool_Click(object sender, EventArgs e)
@@ -477,6 +503,12 @@ namespace DarkSoulsModManager
                 Process.Start(gameExe);
             }
             catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("Whoops; you forgot to set the directory! " +
+                    "\nLemme bring up the wizard for you");
+                buildTable();
+            }
+            catch (DirectoryNotFoundException)
             {
                 MessageBox.Show("Whoops; you forgot to set the directory! " +
                     "\nLemme bring up the wizard for you");
@@ -676,20 +708,23 @@ namespace DarkSoulsModManager
         private void colourModEngineButtons()
         {
             readModEngine();
-            if (blockLine.Contains("blockNetworkAccess=1"))
-                blockNetworkAccess.BackColor = Color.FromArgb(128, 64, 0);
-            else
-                blockNetworkAccess.BackColor = Color.Black;
+            if (selectedGame.Contains("DARK"))
+            {
+                if (blockLine.Contains("blockNetworkAccess=1"))
+                    blockNetworkAccess.BackColor = Color.FromArgb(128, 64, 0);
+                else
+                    blockNetworkAccess.BackColor = Color.Black;
 
-            if (altSaveLine.Contains("useAlternateSaveFile=1"))
-                useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
-            else
-                useAlternateSaveFile.BackColor = Color.Black;
+                if (altSaveLine.Contains("useAlternateSaveFile=1"))
+                    useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
+                else
+                    useAlternateSaveFile.BackColor = Color.Black;
 
             if (paramLine.Contains("loadLooseParams=1"))
                 loadLooseParams.BackColor = Color.FromArgb(128, 64, 0);
             else
                 loadLooseParams.BackColor = Color.Black;
+            }
 
             if (uxmLine.Contains("loadUXMFiles=1"))
                 loadUXMFiles.BackColor = Color.FromArgb(128, 64, 0);

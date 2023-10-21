@@ -434,7 +434,7 @@ namespace DarkSoulsModManager
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ME2";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Dark Souls Mod Manager";
+            this.Text = "ME2";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ME2_FormClosed);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);

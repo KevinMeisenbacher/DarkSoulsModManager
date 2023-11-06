@@ -164,34 +164,37 @@ namespace DarkSoulsModManager
             buildTable();
         }
 
+        // Wizard that navigates to game library
         private void buildTable()
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
-            { Description = "Navigate to the folder that has Steam and click OK" })
+            { Description = @"Steam users, go to the folder that has Steam. Other people, go to the one that has the video games. Then, click OK." })
             {
+                string steam = "";
+                string steamapps = "";
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    // Automatically find Dark Souls 3's directory
-                    selectedDrive = fbd.SelectedPath;
-                    string[] driveDirs = Directory.GetDirectories(selectedDrive);
-                    foreach (string dir in driveDirs)
+                    foreach (string dir in Directory.GetDirectories(fbd.SelectedPath))
                     {
-                        try
+                        steamLib = fbd.SelectedPath;
+                        if (dir.Contains("steam") || dir.Contains("Steam"))
                         {
-                            string[] contents = Directory.GetDirectories(dir);
-                        }
-                        catch (System.UnauthorizedAccessException)
-                        {
-                            continue;
-                        }
-                        if (dir.Contains("Steam"))
-                        {
-                            steamLib = dir + @"\steamapps\common";
+                            steam = dir;
                         }
                     }
-
+                    foreach (string dir in Directory.GetDirectories(steam))
+                    {
+                        if (dir.Contains("steamapp"))
+                        {
+                            steamapps = dir;
+                        }
+                    }
+                    if (fbd.SelectedPath.Contains("common"))
+                        steamLib = fbd.SelectedPath;
+                    else
+                        steamLib = steamapps + @"\common";
+                    Console.WriteLine(steamLib);
                     games = Directory.GetDirectories(steamLib);
-
                     gameDirConfig = "game dir config.txt";
                     File.WriteAllText(gameDirConfig, steamLib);
                     initializeTable();

@@ -39,7 +39,6 @@ namespace DarkSoulsModManager
             this.gamesDD = new System.Windows.Forms.ComboBox();
             this.navToME2 = new System.Windows.Forms.Button();
             this.refresh = new System.Windows.Forms.Button();
-            this.launchGame = new System.Windows.Forms.Button();
             this.notificationLabel = new System.Windows.Forms.Label();
             this.navToSave = new System.Windows.Forms.Button();
             this.backup = new System.Windows.Forms.Button();
@@ -54,6 +53,7 @@ namespace DarkSoulsModManager
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.GoForward = new System.Windows.Forms.Button();
             this.GoBack = new System.Windows.Forms.Button();
+            this.launchGame = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.openModDirWizard = new System.Windows.Forms.Button();
             this.toolsDD = new System.Windows.Forms.ComboBox();
@@ -80,47 +80,47 @@ namespace DarkSoulsModManager
             // dataGridView1
             // 
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Garamond", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Goldenrod;
             this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.BackgroundColor = System.Drawing.Color.Black;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Garamond", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Goldenrod;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Garamond", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Goldenrod;
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.dataGridView1.GridColor = System.Drawing.Color.Black;
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(0);
             this.dataGridView1.Name = "dataGridView1";
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Garamond", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Goldenrod;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Goldenrod;
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridView1.RowHeadersWidth = 62;
             dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Goldenrod;
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridView1.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.Black;
-            this.dataGridView1.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.dataGridView1.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Goldenrod;
             this.dataGridView1.RowTemplate.Height = 28;
             this.dataGridView1.Size = new System.Drawing.Size(472, 430);
             this.dataGridView1.TabIndex = 1;
@@ -133,7 +133,7 @@ namespace DarkSoulsModManager
             this.gamesDD.FormattingEnabled = true;
             this.gamesDD.Location = new System.Drawing.Point(179, 2);
             this.gamesDD.Name = "gamesDD";
-            this.gamesDD.Size = new System.Drawing.Size(224, 26);
+            this.gamesDD.Size = new System.Drawing.Size(224, 28);
             this.gamesDD.TabIndex = 18;
             this.gamesDD.Text = "Game";
             this.gamesDD.SelectedIndexChanged += new System.EventHandler(this.gamesDD_SelectedIndexChanged);
@@ -162,24 +162,12 @@ namespace DarkSoulsModManager
             this.refresh.UseVisualStyleBackColor = true;
             this.refresh.Click += new System.EventHandler(this.refresh_Click);
             // 
-            // launchGame
-            // 
-            this.launchGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
-            this.launchGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.launchGame.Location = new System.Drawing.Point(409, 3);
-            this.launchGame.Name = "launchGame";
-            this.launchGame.Size = new System.Drawing.Size(101, 23);
-            this.launchGame.TabIndex = 21;
-            this.launchGame.Text = "Launch Game";
-            this.launchGame.UseVisualStyleBackColor = true;
-            this.launchGame.Click += new System.EventHandler(this.launchGame_Click);
-            // 
             // notificationLabel
             // 
             this.notificationLabel.AutoSize = true;
             this.notificationLabel.Location = new System.Drawing.Point(5, 7);
             this.notificationLabel.Name = "notificationLabel";
-            this.notificationLabel.Size = new System.Drawing.Size(124, 18);
+            this.notificationLabel.Size = new System.Drawing.Size(131, 20);
             this.notificationLabel.TabIndex = 22;
             this.notificationLabel.Text = "Notification Label";
             // 
@@ -343,7 +331,7 @@ namespace DarkSoulsModManager
             // 
             // GoForward
             // 
-            this.GoForward.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.GoForward.BackColor = System.Drawing.Color.Goldenrod;
             this.GoForward.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.GoForward.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GoForward.Location = new System.Drawing.Point(30, 4);
@@ -356,7 +344,7 @@ namespace DarkSoulsModManager
             // 
             // GoBack
             // 
-            this.GoBack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.GoBack.BackColor = System.Drawing.Color.Goldenrod;
             this.GoBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.GoBack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.GoBack.Location = new System.Drawing.Point(3, 4);
@@ -366,6 +354,17 @@ namespace DarkSoulsModManager
             this.GoBack.Text = "<";
             this.GoBack.UseVisualStyleBackColor = false;
             this.GoBack.Click += new System.EventHandler(this.GoBack_Click);
+            // 
+            // launchGame
+            // 
+            this.launchGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.launchGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.launchGame.Location = new System.Drawing.Point(409, 3);
+            this.launchGame.Name = "launchGame";
+            this.launchGame.Size = new System.Drawing.Size(101, 23);
+            this.launchGame.TabIndex = 21;
+            this.launchGame.Text = "Launch Game";
+            this.launchGame.UseVisualStyleBackColor = true;
             // 
             // splitContainer2
             // 
@@ -406,7 +405,7 @@ namespace DarkSoulsModManager
             this.toolsDD.FormattingEnabled = true;
             this.toolsDD.Location = new System.Drawing.Point(134, 6);
             this.toolsDD.Name = "toolsDD";
-            this.toolsDD.Size = new System.Drawing.Size(329, 26);
+            this.toolsDD.Size = new System.Drawing.Size(329, 28);
             this.toolsDD.TabIndex = 29;
             this.toolsDD.Text = "Pick a modding tool here to launch it";
             this.toolsDD.SelectedIndexChanged += new System.EventHandler(this.toolsDD_SelectedIndexChanged);
@@ -424,12 +423,12 @@ namespace DarkSoulsModManager
             // 
             // ME2
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1186, 500);
             this.Controls.Add(this.splitContainer1);
-            this.Font = new System.Drawing.Font("Garamond", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ME2";
@@ -464,7 +463,6 @@ namespace DarkSoulsModManager
         private System.Windows.Forms.ComboBox gamesDD;
         private System.Windows.Forms.Button navToME2;
         private System.Windows.Forms.Button refresh;
-        private System.Windows.Forms.Button launchGame;
         private System.Windows.Forms.Label notificationLabel;
         private System.Windows.Forms.Button navToSave;
         private System.Windows.Forms.Button backup;
@@ -483,5 +481,6 @@ namespace DarkSoulsModManager
         private System.Windows.Forms.Button openModDirWizard;
         private System.Windows.Forms.ComboBox toolsDD;
         private System.Windows.Forms.Button launchTool;
+        private System.Windows.Forms.Button launchGame;
     }
 }

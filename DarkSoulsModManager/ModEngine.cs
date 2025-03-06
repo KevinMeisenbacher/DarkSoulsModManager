@@ -32,8 +32,8 @@ namespace DarkSoulsModManager
             // Populate gamesDD with moddable games
             moddableGames = new List<string>();
             //moddableGames.Add("Dark Souls Prepare to Die Edition");
-            //moddableGames.Add("DARK SOULS REMASTERED");
-            //moddableGames.Add("DARK SOULS II Scholar of the First Sin");
+            moddableGames.Add("DARK SOULS REMASTERED");
+            moddableGames.Add("DARK SOULS II Scholar of the First Sin");
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
             moddableGames.Add("ELDEN RING");
@@ -49,6 +49,7 @@ namespace DarkSoulsModManager
             gameFiles.Add("param");
             gameFiles.Add("parts");
             gameFiles.Add("sound");
+            gameFiles.Add("tex_override");
 
             // Initialize the notification label
             notificationLabel.Text = "";
@@ -390,7 +391,6 @@ namespace DarkSoulsModManager
                 // When a checkbox is clicked, change the active mod to the corresponding one
                 if ((bool)this.dataGridView1.CurrentCell.Value == true)
                 {
-                    //Console.WriteLine(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value);
                     foreach (Mod mod in mods)
                     {
                         if (mod.modName.Equals(this.dataGridView1.Rows[e.RowIndex].Cells[1].Value))
@@ -711,22 +711,36 @@ namespace DarkSoulsModManager
         private void colourModEngineButtons()
         {
             readModEngine();
-            if (selectedGame.Contains("DARK"))
+            if (gamesDD.Text.Contains("DARK"))
             {
                 if (blockLine.Contains("blockNetworkAccess=1"))
                     blockNetworkAccess.BackColor = Color.FromArgb(128, 64, 0);
                 else
                     blockNetworkAccess.BackColor = Color.Black;
-
-                if (altSaveLine.Contains("useAlternateSaveFile=1"))
-                    useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
+                if (altSaveLine == null)
+                {
+                    useAlternateSaveFile.ForeColor = Color.Black;
+                    useAlternateSaveFile.Enabled = false;
+                }
                 else
-                    useAlternateSaveFile.BackColor = Color.Black;
-
-            if (paramLine.Contains("loadLooseParams=1"))
-                loadLooseParams.BackColor = Color.FromArgb(128, 64, 0);
-            else
-                loadLooseParams.BackColor = Color.Black;
+                {
+                    if (altSaveLine.Contains("useAlternateSaveFile=1"))
+                        useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
+                    else
+                        useAlternateSaveFile.BackColor = Color.Black;
+                }
+                if (paramLine == null)
+                {
+                    loadLooseParams.ForeColor= Color.Black;
+                    loadLooseParams.Enabled = false;
+                }
+                else
+                {
+                    if (paramLine.Contains("loadLooseParams=1"))
+                        loadLooseParams.BackColor = Color.FromArgb(128, 64, 0);
+                    else
+                        loadLooseParams.BackColor = Color.Black;
+                }
             }
 
             if (uxmLine.Contains("loadUXMFiles=1"))
@@ -768,17 +782,12 @@ namespace DarkSoulsModManager
 
         private bool isModEngine()
         {
-            return gamesDD.Text.Contains("DARK SOULS III") || gamesDD.Text.Contains("Sekiro");
-        }
-
-        private bool isUXM()
-        {
-            return gamesDD.Text.Contains("Scholar") || gamesDD.Text.Contains("Remastered");
+            return gamesDD.Text.Contains("DARK SOULS II") || gamesDD.Text.Contains("Sekiro");
         }
 
         private bool isME2()
         {
-            return gamesDD.Text.Contains("ELDEN") || gamesDD.Text.Contains("ARMORED");
+            return gamesDD.Text.Contains("REMASTERED") || gamesDD.Text.Contains("ELDEN") || gamesDD.Text.Contains("ARMORED");
         }
 
         private bool isPTDE()

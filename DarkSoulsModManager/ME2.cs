@@ -10,10 +10,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Tomlyn;
-using Tomlyn.Model;
-using Tomlyn.Parsing;
-using Tomlyn.Syntax;
 
 namespace DarkSoulsModManager
 {
@@ -42,7 +38,7 @@ namespace DarkSoulsModManager
             // Populate gamesDD with moddable games
             moddableGames = new List<string>();
             //moddableGames.Add("Dark Souls Prepare to Die Edition");
-            //moddableGames.Add("DARK SOULS REMASTERED");
+            moddableGames.Add("DARK SOULS REMASTERED");
             //moddableGames.Add("DARK SOULS II Scholar of the First Sin");
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
@@ -138,9 +134,6 @@ namespace DarkSoulsModManager
             ToolTip launchToolToolTip = new ToolTip();
             launchToolToolTip.SetToolTip(this.launchTool, "Launches the tool you selected without having to menu to it again");
 
-            ToolTip launchGameToolTip = new ToolTip();
-            launchGameToolTip.SetToolTip(this.launchGame, "Doesn't work yet. Currently just tells you to launch the old school way.");
-
             ToolTip refreshToolTip = new ToolTip();
             refreshToolTip.SetToolTip(this.refresh, "Reloads the table with fresh information!");
 
@@ -152,7 +145,7 @@ namespace DarkSoulsModManager
         {
             if (gamesDD.Text.Contains("DARK SOULS II") || gamesDD.Text.Contains("ELDEN"))
             {
-                game = steamLib + "\\" + gamesDD.SelectedItem + "\\Game";
+                game = steamLib + "\\" + gamesDD.Text + "\\Game";
             }
             else if (gamesDD.Text.Contains("Die"))
             {
@@ -206,6 +199,13 @@ namespace DarkSoulsModManager
                 selectedGame = "ELDEN RING";
                 gameSaveDir = @"\EldenRing";
                 gameSave = @"\ER0000.sl2";
+            }
+            else if (gamesDD.Text.Contains("REMASTERED"))
+            {
+                gameConfig = @"\config_darksoulsremastered.toml";
+                selectedGame = "DARK SOULS REMASTERED";
+                gameSaveDir = @"\DARK SOULS REMASTERED";
+                gameSave = @"\DRAKS0005.sl2";
             }
 
             // Remember what game the mod manager is on
@@ -268,29 +268,22 @@ namespace DarkSoulsModManager
                 {
                     steamLib = "";
                 }
-                if (File.Exists("me2 config.txt"))
-                {
-                    me2Config = "me2 config.txt";
-                    File.WriteAllText(me2Config, steamLib + @"\" + gamesDD.Text + @"\Mod Engine 2");
-                    me2 = File.ReadAllText(me2Config) + gameConfig;
-                    lines = File.ReadAllLines(me2);
-                }
-                else
-                {
-                    File.WriteAllText("me2 config.txt", steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2");
-                    me2Config = "me2 config.txt";
-                    me2 = File.ReadAllText(me2Config) + gameConfig;
-                    lines = File.ReadAllLines(me2);
-                }
+                if (!File.Exists("me2 Config.txt")) 
+                    navigateToME2();
+
+
+                me2Config = "me2 config.txt";
+                me2 = File.ReadAllText(me2Config) + gameConfig;
+                lines = File.ReadAllLines(me2);
             }
 
             // Load mods
             mods = new List<Mod>();
             if (isME2())
             {
-                modList = steamLib + "\\" + gamesDD.SelectedItem + "\\" + "Mod Engine 2";
                 if (File.Exists("me2 config.txt"))
                 {
+                    modList = File.ReadAllText("me2 config.txt");
                     webBrowser1.Url = new Uri(modList);
                 }
                 else
@@ -390,6 +383,11 @@ namespace DarkSoulsModManager
 
         #region me2
         private void navToME2_Click(object sender, EventArgs e)
+        {
+            navigateToME2();
+        }
+
+        private void navigateToME2()
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             {
@@ -515,7 +513,6 @@ namespace DarkSoulsModManager
             // Pre-tick active mods
             foreach (Mod mod in mods)
             {
-
                 foreach (string line in File.ReadAllLines(me2))
                 {
                     if (line.Contains(mod.modName))
@@ -565,11 +562,6 @@ namespace DarkSoulsModManager
                 {
                     sortedLines[i] = lines[j];
                 }
-            }
-
-            for (int i = 0; i < mods.Count; i++)
-            {
-                //Console.WriteLine(sortedLines[i]);
             }
 
             // Update eldenring_config.toml
@@ -680,7 +672,10 @@ namespace DarkSoulsModManager
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     userPath = fbd.SelectedPath;
-                    saveDir = userPath + "\\AppData\\Roaming" + gameSaveDir;
+                    if (selectedGame == "DARK SOULS REMASTERED")
+                        saveDir = userPath + "OneDrive\\Documents\\NBGI" + gameSaveDir;
+                    else
+                        saveDir = userPath + "\\AppData\\Roaming" + gameSaveDir;
                     foreach (string dir in Directory.GetDirectories(saveDir))
                     {
                         foreach (string file in Directory.GetFiles(dir))
@@ -844,23 +839,6 @@ namespace DarkSoulsModManager
         }
         #endregion
 
-        #region launch
-        private void launchGame_Click(object sender, EventArgs e)
-        {
-            //string batFilePath = me2Config + "\\launchmod_eldenring.bat";
-            //ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd.exe", "/c " + batFilePath);
-            //processStartInfo.CreateNoWindow = true;
-            //processStartInfo.UseShellExecute = false;
-            //Process process = new Process();
-            //process.StartInfo = processStartInfo;
-            //Console.WriteLine("Attempting to launch " + batFilePath);
-            //process.Start();
-
-            //Process.Start(me2Config + @"\modengine2_launcher.exe -t er -c \config_eldenring.toml");
-            MessageBox.Show("Please double click the bat file in the browser to launch. Can't figure out how to do this programmatically!");
-        }
-        #endregion
-
         #region infoAndMaintenance
         private void refresh_Click(object sender, EventArgs e)
         {
@@ -877,17 +855,12 @@ namespace DarkSoulsModManager
         #region engineBools
         private bool isModEngine()
         {
-            return gamesDD.Text.Contains("DARK SOULS III") || gamesDD.Text.Contains("Sekiro");
-        }
-
-        private bool isUXM()
-        {
-            return gamesDD.Text.Contains("Scholar") || gamesDD.Text.Contains("Remastered");
+            return gamesDD.Text.Contains("DARK SOULS II") || gamesDD.Text.Contains("Sekiro");
         }
 
         private bool isME2()
         {
-            return gamesDD.Text.Contains("ELDEN") || gamesDD.Text.Contains("ARMORED");
+            return gamesDD.Text.Contains("REMASTERED") || gamesDD.Text.Contains("ELDEN") || gamesDD.Text.Contains("ARMORED");
         }
 
         private bool isPTDE()

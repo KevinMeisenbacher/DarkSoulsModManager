@@ -140,7 +140,7 @@ namespace DarkSoulsModManager
             // 
             // navToME2
             // 
-            this.navToME2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.navToME2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.navToME2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.navToME2.Location = new System.Drawing.Point(308, 9);
             this.navToME2.Name = "navToME2";
@@ -152,7 +152,7 @@ namespace DarkSoulsModManager
             // 
             // refresh
             // 
-            this.refresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.refresh.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.refresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.refresh.Location = new System.Drawing.Point(3, 2);
             this.refresh.Name = "refresh";
@@ -173,7 +173,7 @@ namespace DarkSoulsModManager
             // 
             // navToSave
             // 
-            this.navToSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.navToSave.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.navToSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.navToSave.Location = new System.Drawing.Point(3, 197);
             this.navToSave.Name = "navToSave";
@@ -185,7 +185,7 @@ namespace DarkSoulsModManager
             // 
             // backup
             // 
-            this.backup.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.backup.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.backup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.backup.Location = new System.Drawing.Point(3, 75);
             this.backup.Name = "backup";
@@ -197,7 +197,7 @@ namespace DarkSoulsModManager
             // 
             // restore
             // 
-            this.restore.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.restore.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.restore.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.restore.Location = new System.Drawing.Point(3, 104);
             this.restore.Name = "restore";
@@ -209,7 +209,7 @@ namespace DarkSoulsModManager
             // 
             // checkDrive
             // 
-            this.checkDrive.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.checkDrive.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.checkDrive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkDrive.Location = new System.Drawing.Point(3, 12);
             this.checkDrive.Name = "checkDrive";
@@ -221,7 +221,7 @@ namespace DarkSoulsModManager
             // 
             // navToBackup
             // 
-            this.navToBackup.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.navToBackup.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.navToBackup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.navToBackup.Location = new System.Drawing.Point(3, 168);
             this.navToBackup.Name = "navToBackup";
@@ -233,7 +233,7 @@ namespace DarkSoulsModManager
             // 
             // loadME2Btn
             // 
-            this.loadME2Btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.loadME2Btn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.loadME2Btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.loadME2Btn.Location = new System.Drawing.Point(410, 9);
             this.loadME2Btn.Name = "loadME2Btn";
@@ -254,7 +254,7 @@ namespace DarkSoulsModManager
             // 
             // updateModConfig
             // 
-            this.updateModConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.updateModConfig.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.updateModConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.updateModConfig.Location = new System.Drawing.Point(179, 9);
             this.updateModConfig.Name = "updateModConfig";
@@ -357,7 +357,7 @@ namespace DarkSoulsModManager
             // 
             // launchGame
             // 
-            this.launchGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.launchGame.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.launchGame.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.launchGame.Location = new System.Drawing.Point(409, 3);
             this.launchGame.Name = "launchGame";
@@ -388,7 +388,7 @@ namespace DarkSoulsModManager
             // 
             // openModDirWizard
             // 
-            this.openModDirWizard.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.openModDirWizard.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.openModDirWizard.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.openModDirWizard.Location = new System.Drawing.Point(4, 6);
             this.openModDirWizard.Name = "openModDirWizard";
@@ -412,7 +412,7 @@ namespace DarkSoulsModManager
             // 
             // launchTool
             // 
-            this.launchTool.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.launchTool.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
             this.launchTool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.launchTool.Location = new System.Drawing.Point(469, 6);
             this.launchTool.Name = "launchTool";

@@ -538,7 +538,7 @@ namespace DarkSoulsModManager
                     }
 
                     if (!newLines.Contains(mod.modName))
-                        newLines[29] = "    { enabled = false, name = \"" + mod.modName + "\", path = \"" + mod.modName + "\" },";
+                        newLines[target + 1] = "    { enabled = false, name = \"" + mod.modName + "\", path = \"" + mod.modName + "\" },";
 
                     for (int i = target + 2; i < newLines.Length; i++)
                     {

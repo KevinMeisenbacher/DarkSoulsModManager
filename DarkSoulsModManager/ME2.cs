@@ -24,7 +24,6 @@ namespace DarkSoulsModManager
         private List<String> gameFiles, trueMods, modLines, moddableGames;
         private List<Button> buttons;
         private Mod activeMod;
-        private ModManager manager;
 
         #region startup
         public ME2()
@@ -39,7 +38,7 @@ namespace DarkSoulsModManager
             moddableGames = new List<string>();
             //moddableGames.Add("Dark Souls Prepare to Die Edition");
             moddableGames.Add("DARK SOULS REMASTERED");
-            //moddableGames.Add("DARK SOULS II Scholar of the First Sin");
+            moddableGames.Add("DARK SOULS II Scholar of the First Sin");
             moddableGames.Add("DARK SOULS III");
             moddableGames.Add("Sekiro");
             moddableGames.Add("ELDEN RING");
@@ -294,10 +293,8 @@ namespace DarkSoulsModManager
             }
             dirs = Directory.GetDirectories(modList);
 
-            // Fetch mod archives and trim them to mod names
+            // Fetch mod archives and trim them to mod names. These 2 things will be used to trim file extensions.
             int modTrim = modList.Length;
-
-            // These 2 things will be used to trim file extensions
             string modTrimmed;
 
             foreach (string dir in dirs)
@@ -363,10 +360,7 @@ namespace DarkSoulsModManager
                 }
             }
 
-            // Read ME2's config
             lines = File.ReadAllLines(me2);
-
-            // Save the chosen directory to file
             Console.ReadLine();
             dataGridView1.DataSource = mods;
             dataGridView1.AutoResizeColumns();

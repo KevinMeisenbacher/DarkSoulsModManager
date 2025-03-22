@@ -15,14 +15,13 @@ namespace DarkSoulsModManager
 {
     public partial class ModEngine : Form
     {
-        private string steamLib, selectedDrive, game, selectedGame, modengine, moddingPath;         // paths
+        private string steamLib, game, selectedGame, modengine, moddingPath;                        // paths
         private string text, gameTracker, gameDirConfig, modDirConfig, modTool, tool;               // string objects
         private string blockLine, paramLine, uxmLine, overrideLine, overrideDirLine, altSaveLine;   // Modengine lines
         private string[] lines, dirs, moddingDir, modFiles, tools, games;                           // Mostly file navimagation
-        private List<Mod> mods, activeMods;
+        private List<Mod> mods;
         private List<String> gameFiles, moddableGames;
         private Mod activeMod;
-        private ModManager manager;
 
         public ModEngine()
         {
@@ -169,32 +168,11 @@ namespace DarkSoulsModManager
         private void buildTable()
         {
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
-            { Description = @"Steam users, go to the folder that has Steam. Other people, go to the one that has the video games. Then, click OK." })
+            { Description = @"Go to the folder that has the video games, then click OK." })
             {
-                string steam = "";
-                string steamapps = "";
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    foreach (string dir in Directory.GetDirectories(fbd.SelectedPath))
-                    {
-                        steamLib = fbd.SelectedPath;
-                        if (dir.Contains("steam") || dir.Contains("Steam"))
-                        {
-                            steam = dir;
-                        }
-                    }
-                    foreach (string dir in Directory.GetDirectories(steam))
-                    {
-                        if (dir.Contains("steamapp"))
-                        {
-                            steamapps = dir;
-                        }
-                    }
-                    if (fbd.SelectedPath.Contains("common"))
-                        steamLib = fbd.SelectedPath;
-                    else
-                        steamLib = steamapps + @"\common";
-                    Console.WriteLine(steamLib);
+                    steamLib = fbd.SelectedPath;
                     games = Directory.GetDirectories(steamLib);
                     gameDirConfig = "game dir config.txt";
                     File.WriteAllText(gameDirConfig, steamLib);
@@ -229,7 +207,7 @@ namespace DarkSoulsModManager
                 }
                 catch (DirectoryNotFoundException)
                 {
-                    MessageBox.Show("Whoops! Looks like you forgot to set the game's directory. Lemme get that for ya");
+                    MessageBox.Show("Summoning wizard to help you navigate to your games");
                     buildTable();
                 }
             }
@@ -293,7 +271,15 @@ namespace DarkSoulsModManager
             // Create file browser and file list
             webBrowser1.Url = new Uri(game);
             mods = new List<Mod>();
-            dirs = Directory.GetDirectories(game);
+            try
+            {
+                dirs = Directory.GetDirectories(game);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                MessageBox.Show("Summoning wizard to help you navigate to your games");
+                buildTable();
+            }
 
             // Fetch mod archives and trim them to mod names
             int modTrim = game.Length;
@@ -507,14 +493,14 @@ namespace DarkSoulsModManager
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("Whoops; you forgot to set the directory! " +
-                    "\nLemme bring up the wizard for you");
+                MessageBox.Show("One sec; gonna need the directory you use for this. " +
+                    "\nI'll summon the wizard");
                 buildTable();
             }
             catch (DirectoryNotFoundException)
             {
-                MessageBox.Show("Whoops; you forgot to set the directory! " +
-                    "\nLemme bring up the wizard for you");
+                MessageBox.Show("One sec; gonna need the directory you use for this. " +
+                    "\nI'll summon the wizard");
                 buildTable();
             }
         }
@@ -550,8 +536,8 @@ namespace DarkSoulsModManager
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("Whoops; you forgot to set the directory! " +
-                    "\nLemme bring up the wizard for you");
+                MessageBox.Show("One sec; gonna need the directory you use for this. " +
+                    "\nI'll summon the wizard");
                 buildTable();
             }
         }

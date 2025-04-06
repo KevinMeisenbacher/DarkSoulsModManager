@@ -703,18 +703,20 @@ namespace DarkSoulsModManager
                     blockNetworkAccess.BackColor = Color.FromArgb(128, 64, 0);
                 else
                     blockNetworkAccess.BackColor = Color.Black;
-                if (altSaveLine == null)
-                {
-                    useAlternateSaveFile.ForeColor = Color.Black;
-                    useAlternateSaveFile.Enabled = false;
-                }
-                else
-                {
-                    if (altSaveLine.Contains("useAlternateSaveFile=1"))
-                        useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
-                    else
-                        useAlternateSaveFile.BackColor = Color.Black;
-                }
+                //if (altSaveLine == null)
+                //{
+                //    useAlternateSaveFile.ForeColor = Color.Black;
+                //    useAlternateSaveFile.Enabled = false;
+                //}
+                //else
+                //{
+                //    useAlternateSaveFile.Enabled = true;
+                //    if (altSaveLine.Contains("useAlternateSaveFile=1"))
+                //        useAlternateSaveFile.BackColor = Color.FromArgb(128, 64, 0);
+                //    else
+                //        useAlternateSaveFile.BackColor = Color.Black;
+                //}
+                useAlternateSaveFile.Enabled = false;
                 if (paramLine == null)
                 {
                     loadLooseParams.ForeColor= Color.Black;
@@ -722,6 +724,7 @@ namespace DarkSoulsModManager
                 }
                 else
                 {
+                    loadLooseParams.Enabled = true;
                     if (paramLine.Contains("loadLooseParams=1"))
                         loadLooseParams.BackColor = Color.FromArgb(128, 64, 0);
                     else

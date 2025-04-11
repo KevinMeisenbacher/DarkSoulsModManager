@@ -10,20 +10,18 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace DarkSoulsModManager
 {
     public partial class ME2 : Form
     {
-        private string steamLib, selectedDrive, game, selectedGame, gameSaveDir, gameSave, moddingPath, modDirConfig, userPath; // paths
-        private string saveDir, saveDirFile, saveSpot, saveSpotFile, backupDir, backupDirFile, backupSpot, backupSpotFile;      // Save backup
-        private string text, gameTracker, gameConfig, memory, me2, me2Config, modTool, tool, modList, activeModList;            // string objects
-        private string[] lines, dirs, moddingDir, modFiles, tools, games;                                                       // Line and file navigation
-        private List<Mod> mods, activeMods, listedMods, unlistedMods;
-
-        private List<String> gameFiles, trueMods, modLines, moddableGames;
-        private List<Button> buttons;
-        private Mod activeMod;
+        private string steamLib, gamePath, selectedGame, moddingPath, modDirConfig;                             // paths
+        private string saveFileDir, saveFile, savePath, userDir, backupSpot;                                    // Save backup
+        private string text, gameTracker, gameConfig, me2, me2Config, modTool, tool, modList, activeModList;    // string objects
+        private string[] lines, dirs, moddingDir, modFiles, tools;                                              // Line and file navigation
+        private List<Mod> mods, activeMods, listedMods, unlistedMods;                                           // Mods
+        private List<String> gameFiles, trueMods, modLines, moddableGames;                                      // Various lists that update according to user input
 
         #region startup
         public ME2()
@@ -144,15 +142,15 @@ namespace DarkSoulsModManager
         {
             if (gamesDD.Text.Contains("DARK SOULS II") || gamesDD.Text.Contains("ELDEN"))
             {
-                game = steamLib + "\\" + gamesDD.Text + "\\Game";
+                gamePath = steamLib + "\\" + gamesDD.Text + "\\Game";
             }
             else if (gamesDD.Text.Contains("Die"))
             {
-                game = steamLib + "\\" + gamesDD.Text + "\\DATA";
+                gamePath = steamLib + "\\" + gamesDD.Text + "\\DATA";
             }
             else
             {
-                game = steamLib + "\\" + gamesDD.Text;
+                gamePath = steamLib + "\\" + gamesDD.Text;
             }
 
             // Flip to a different view that handles the respective tool's games
@@ -189,27 +187,27 @@ namespace DarkSoulsModManager
             {
                 gameConfig = @"\config_armoredcore6.toml";
                 selectedGame = "ARMORED CORE VI FIRES OF RUBICON";
-                gameSaveDir = @"\ArmoredCore6";
-                gameSave = @"\AC0000.sl2";
+                saveFileDir = "ArmoredCore6";
+                saveFile = @"\AC0000.sl2";
             }
             else if (gamesDD.Text.Contains("ELDEN"))
             {
                 gameConfig = @"\config_eldenring.toml";
                 selectedGame = "ELDEN RING";
-                gameSaveDir = @"\EldenRing";
-                gameSave = @"\ER0000.sl2";
+                saveFileDir = "EldenRing";
+                saveFile = @"\ER0000.sl2";
             }
             else if (gamesDD.Text.Contains("REMASTERED"))
             {
                 gameConfig = @"\config_darksoulsremastered.toml";
                 selectedGame = "DARK SOULS REMASTERED";
-                gameSaveDir = @"\DARK SOULS REMASTERED";
-                gameSave = @"\DRAKS0005.sl2";
+                saveFileDir = "DARK SOULS REMASTERED";
+                saveFile = @"\DRAKS0005.sl2";
             }
 
-            // Remember what game the mod manager is on
-            gameTracker = "game tracker.txt";
-            File.WriteAllText(gameTracker, game);
+            // Remember what gamePath the mod manager is on
+            gameTracker = "gamePath tracker.txt";
+            File.WriteAllText(gameTracker, gamePath);
         }
 
 
@@ -223,35 +221,52 @@ namespace DarkSoulsModManager
             modLines = new List<string>();
 
             // Remember save and backup spots
-            selectedDrive = File.ReadAllText("game dir config.txt").Substring(0, 3);
-            if (File.Exists("save dir.txt"))
+            if (!Directory.Exists("saveBackup"))
             {
-                saveDir = File.ReadAllText("save dir.txt");
+                Directory.CreateDirectory("saveBackup");
             }
-            if (File.Exists("save spot.txt"))
+            if (File.Exists("saveBackup/" + selectedGame + "save spot.txt"))
             {
-                saveSpot = File.ReadAllText("save spot.txt");
+                savePath = File.ReadAllText("saveBackup/" + selectedGame + "save spot.txt");
             }
-            if (File.Exists("backup dir.txt"))
+            if (File.Exists("saveBackup/" + selectedGame + "backup dir.txt"))
             {
-                backupDir = File.ReadAllText("backup dir.txt");
+                userDir = File.ReadAllText("saveBackup/" + selectedGame + "backup dir.txt");
             }
-            if (File.Exists("backup spot.txt"))
+            if (File.Exists("saveBackup/" + selectedGame + "backup spot.txt"))
             {
-                backupSpot = File.ReadAllText("backup spot.txt");
+                backupSpot = File.ReadAllText("saveBackup/" + selectedGame + "backup spot.txt");
+            }
+            foreach (string gamePath in moddableGames)
+            {
+                if (!Directory.Exists("saveBackup/" + gamePath))
+                {
+                    Directory.CreateDirectory("saveBackup/" + gamePath);
+                }
+            }
+            if (!Directory.Exists("altSaves"))
+            {
+                Directory.CreateDirectory("altSaves");
+            }
+            foreach (string gamePath in moddableGames)
+            {
+                if (!Directory.Exists("altSaves//" + gamePath))
+                {
+                    Directory.CreateDirectory(gamePath);
+                }
             }
 
-            // Load game
+            // Load gamePath
             if (gamesDD.Text.Contains("Game"))
             {
-                if (File.Exists("me2 game.txt"))
+                if (File.Exists("me2 gamePath.txt"))
                 {
-                    gamesDD.Text = File.ReadAllText("me2 game.txt");
+                    gamesDD.Text = File.ReadAllText("me2 gamePath.txt");
                 }
                 else
                 {
-                    File.WriteAllText("me2 game.txt", "ELDEN RING");
-                    gamesDD.Text = File.ReadAllText("me2 game.txt");
+                    File.WriteAllText("me2 gamePath.txt", "ELDEN RING");
+                    gamesDD.Text = File.ReadAllText("me2 gamePath.txt");
                 }
             }
             determineGame();
@@ -365,8 +380,8 @@ namespace DarkSoulsModManager
             dataGridView1.DataSource = mods;
             dataGridView1.AutoResizeColumns();
 
-            // Save the selected game
-            File.WriteAllText("me2 game.txt", gamesDD.Text);
+            // Save the selected gamePath
+            File.WriteAllText("me2 gamePath.txt", gamesDD.Text);
         }
 
         private void gamesDD_SelectedIndexChanged(object sender, EventArgs e)
@@ -386,15 +401,11 @@ namespace DarkSoulsModManager
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             {
                 Description = "Navigate to where Mod Engine 2 is and click OK",
-                SelectedPath = game
+                SelectedPath = gamePath
             })
             {
-                Console.WriteLine("Selected drive: " + game);
                 if (fbd.ShowDialog() == DialogResult.OK)
-                {
-                    selectedDrive = fbd.SelectedPath;
-                    modList = selectedDrive;
-                }
+                    modList = fbd.SelectedPath;
             }
 
             me2Config = "me2 config.txt";
@@ -477,7 +488,7 @@ namespace DarkSoulsModManager
 
             // Update selected game's mod config
             text = string.Join("\n", lines);
-            Console.WriteLine("Saving to " + me2);
+            notificationLabel.Text = "Saving to " + me2;
             File.WriteAllText(me2, text);
 
             // Save active mods
@@ -558,7 +569,7 @@ namespace DarkSoulsModManager
                 }
             }
 
-            // Update eldenring_config.toml
+            // Update selected game's mod config
             text = string.Join("\n", lines);
             File.WriteAllText(me2, text);
 
@@ -659,67 +670,28 @@ namespace DarkSoulsModManager
             // Navigate to save
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             {
-                Description = "Go to your user account, and the navigator will take you right to your save",
-                RootFolder = Environment.SpecialFolder.UserProfile
+                Description = "Go to your user path and press OK"
             })
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    userPath = fbd.SelectedPath;
-                    if (selectedGame == "DARK SOULS REMASTERED")
-                        saveDir = userPath + "OneDrive\\Documents\\NBGI" + gameSaveDir;
-                    else
-                        saveDir = userPath + "\\AppData\\Roaming" + gameSaveDir;
-                    foreach (string dir in Directory.GetDirectories(saveDir))
+                    string path = fbd.SelectedPath;
+                    string dir = selectedGame == "DARK SOULS REMASTERED"
+                        ? "/Documents/NBGI/" + saveFileDir
+                        : "/AppData/Roaming/" + saveFileDir;
+                    foreach (string directory in Directory.GetDirectories(path + dir))
                     {
-                        foreach (string file in Directory.GetFiles(dir))
+                        foreach (string file in Directory.GetFiles(directory))
                         {
                             if (file.Contains("sl2") && !file.Contains("bak"))
-                            {
-                                saveSpotFile = file;
-                            }
+                                savePath = file;
                         }
                     }
                 } // end wizard
             } // end fbd
 
-            saveDirFile = "save dir.txt";
-            File.WriteAllText(saveDirFile, saveDir);
-            try
-            {
-                foreach (string dir in Directory.GetDirectories(userPath))
-                {
-                    DirectoryInfo dirInfo = new DirectoryInfo(dir);
-                    dirInfo.Attributes = FileAttributes.Normal;
-                    foreach (string file in Directory.GetFiles(saveDir))
-                    {
-                        FileInfo info = new FileInfo(file);
-                        info.Attributes = FileAttributes.Normal;
-                    }
-                }
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                foreach (string dir in Directory.GetDirectories(userPath))
-                {
-                    DirectoryInfo info = new DirectoryInfo(dir);
-                    info.Attributes = FileAttributes.Normal;
-                    continue;
-                }
-            }
-            foreach (string dir in Directory.GetDirectories(saveDir))
-            {
-                foreach (string file in Directory.GetFiles(dir))
-                {
-                    if (file.Contains("sl2") && !file.Contains("bak"))
-                    {
-                        saveSpot = file;
-                        Console.WriteLine("Save spot: " + saveSpot);
-                    }
-                }
-            }
-            File.WriteAllText("save spot.txt", saveSpot);
-            notificationLabel.Text = "Save data: " + saveSpot;
+            File.WriteAllText("saveBackup/" + selectedGame + "save spot.txt", savePath);
+            notificationLabel.Text = "Save data: " + savePath;
         }
 
         private void navToBackup_Click(object sender, EventArgs e)
@@ -733,67 +705,64 @@ namespace DarkSoulsModManager
             // Pick a backup spot
             using (FolderBrowserDialog fbd = new FolderBrowserDialog()
             {
-                Description = "Now, pick where you want your save backed up to and press OK, but first, " +
-                "check the folder's properties to make sure it isn't read-only, or the mod manager will panic and die"
+                Description = "Go to your user path and press OK"
             })
             {
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    backupDir = fbd.SelectedPath;
+                    userDir = fbd.SelectedPath;
                 }
             }
-
-            backupDirFile = "backup dir.txt";
-            backupSpotFile = "backup spot.txt";
-            File.WriteAllText(backupDirFile, backupDir);
-            File.WriteAllText(backupSpotFile, backupDir + gameSave);
+            File.WriteAllText("saveBackup/backup dir.txt", userDir);
         }
 
         private void backup_Click(object sender, EventArgs e)
         {
-            determineGame();
-            if (File.Exists("save spot.txt"))
+            string dir = "";
+            try
             {
-                if (File.Exists("backup spot.txt"))
+                dir = selectedGame == "DARK SOULS REMASTERED"
+                ? File.ReadAllText("saveBackup/" + selectedGame + "/backup dir.txt") + "/Documents/NBGI/" + saveFileDir
+                : File.ReadAllText("saveBackup/" + selectedGame + "/backup dir.txt") + "/AppData/Roaming/" + saveFileDir; 
+            } catch (FileNotFoundException)
+            {
+                navigateToBackup();
+            }
+            try
+            {
+                foreach (string directory in Directory.GetDirectories(dir))
                 {
-                    if (backupDir == null) navigateToBackup();
-                    else
+                    foreach (string file in Directory.GetFiles(directory))
                     {
-                        Console.WriteLine("Backup dir: " + backupDir);
-                        foreach (string file in Directory.GetFiles(backupDir))
+                        if (file.Contains("sl2") && !file.Contains("bak"))
                         {
-                            DirectoryInfo info = new DirectoryInfo(file);
-                            info.Attributes = FileAttributes.Normal;
-                            File.Delete(file);
+                            savePath = file;
                         }
-                        backupSpotFile = File.ReadAllText("backup spot.txt");
-
-                        // Delete the save backup before replacing to prevent complications
-                        if (File.Exists("backup spot.txt"))
-                        {
-                            DirectoryInfo info = new DirectoryInfo(backupDir);
-                            info.Attributes = FileAttributes.Normal;
-                            File.Delete(backupDir + gameSave);
-                        }
-
-                        // Copy save file to backup
-                        File.Copy(saveSpot, backupDir + gameSave);
-                        notificationLabel.Text = "Save file " + saveSpot + " backed up to " + backupDir;
                     }
                 }
-                else
+                int saveSubstring = selectedGame == "DARK SOULS REMASTERED"
+                    ? 13 : 10;
+                string saveBackup = "saveBackup/" + selectedGame + "/" + saveFile;
+                if (File.Exists(saveBackup))
                 {
-                    backupSpot = backupDir + gameSave;
-                    navigateToBackup();
+                    File.Delete(saveBackup);
+                    File.Copy(savePath, saveBackup);
                 }
+                else
+                    File.Copy(savePath, saveBackup);
+                File.WriteAllText("saveBackup/" + selectedGame + "/save spot.txt", savePath);
+                File.WriteAllText("saveBackup/" + selectedGame + "/backup spot.txt", saveBackup);
+                notificationLabel.Text = "Copied " + savePath + " to gameBackup/" + Path.Combine(selectedGame, saveFile);
             }
-            else
-                navigateToSave();
+            catch (DirectoryNotFoundException)
+            {
+                navigateToBackup();
+            }
         }
 
         private void restore_Click(object sender, EventArgs e)
         {
-            if (File.Exists("save spot.txt") && File.Exists("backup spot.txt"))
+            if (File.Exists("saveBackup/" + selectedGame + "save spot.txt") && File.Exists("saveBackup/" + "backup dir.txt"))
             {
                 restoreSave();
             }
@@ -807,29 +776,24 @@ namespace DarkSoulsModManager
         private void restoreSave()
         {
             determineGame();
-            if (File.Exists("backup dir.txt")) backupSpot = backupDir + gameSave;
-
+            if (File.Exists("saveBackup/" + selectedGame + "backup dir.txt")) 
+                backupSpot = "saveBackup/" + selectedGame + "/" + saveFile;
             else
-            {
-                navigateToBackup();
-                backupSpot = backupDir + gameSave;
-            }
+                MessageBox.Show("Can't restore from a backup that doesn't exist. Back your save up first.");
 
-            if (File.Exists(saveSpot))
+            if (File.Exists(savePath))
             {
-                DirectoryInfo info = new DirectoryInfo(saveSpot);
+                DirectoryInfo info = new DirectoryInfo(savePath);
                 info.Attributes = FileAttributes.Normal;
-                File.Delete(saveSpot);
+                File.Delete(savePath);
             }
-            File.Copy(backupSpot, saveSpot);
-            notificationLabel.Text = "Backup restored to " + backupDir;
+            File.Copy(backupSpot, savePath);
+            notificationLabel.Text = "Backup restored to " + userDir;
         }
         private void checkDrive_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Save dir: " + saveDir +
-                "\n" + "Save spot: " + saveSpot +
-                "\n" + "Backup dir: " + backupDir +
-                "\n" + "Backup spot: " + backupDir + gameSave);
+            MessageBox.Show("Save spot: " + savePath +
+                "\n" + "Backup spot: " + "saveBackup/" + selectedGame + "/" + saveFile);
         }
         #endregion
 

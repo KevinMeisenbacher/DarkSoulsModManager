@@ -43,7 +43,7 @@ namespace DarkSoulsModManager
             this.navToSave = new System.Windows.Forms.Button();
             this.backup = new System.Windows.Forms.Button();
             this.restore = new System.Windows.Forms.Button();
-            this.checkDrive = new System.Windows.Forms.Button();
+            this.checkSaves = new System.Windows.Forms.Button();
             this.navToBackup = new System.Windows.Forms.Button();
             this.loadME2Btn = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
@@ -207,17 +207,17 @@ namespace DarkSoulsModManager
             this.restore.UseVisualStyleBackColor = true;
             this.restore.Click += new System.EventHandler(this.restore_Click);
             // 
-            // checkDrive
+            // checkSaves
             // 
-            this.checkDrive.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
-            this.checkDrive.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkDrive.Location = new System.Drawing.Point(3, 12);
-            this.checkDrive.Name = "checkDrive";
-            this.checkDrive.Size = new System.Drawing.Size(159, 23);
-            this.checkDrive.TabIndex = 26;
-            this.checkDrive.Text = "Check Saves";
-            this.checkDrive.UseVisualStyleBackColor = true;
-            this.checkDrive.Click += new System.EventHandler(this.checkDrive_Click);
+            this.checkSaves.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
+            this.checkSaves.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkSaves.Location = new System.Drawing.Point(3, 12);
+            this.checkSaves.Name = "checkSaves";
+            this.checkSaves.Size = new System.Drawing.Size(159, 23);
+            this.checkSaves.TabIndex = 26;
+            this.checkSaves.Text = "Check Saves";
+            this.checkSaves.UseVisualStyleBackColor = true;
+            this.checkSaves.Click += new System.EventHandler(this.checkSaves_Click);
             // 
             // navToBackup
             // 
@@ -296,7 +296,7 @@ namespace DarkSoulsModManager
             this.splitContainer4.Panel1.Controls.Add(this.restore);
             this.splitContainer4.Panel1.Controls.Add(this.navToBackup);
             this.splitContainer4.Panel1.Controls.Add(this.backup);
-            this.splitContainer4.Panel1.Controls.Add(this.checkDrive);
+            this.splitContainer4.Panel1.Controls.Add(this.checkSaves);
             // 
             // splitContainer4.Panel2
             // 
@@ -467,7 +467,7 @@ namespace DarkSoulsModManager
         private System.Windows.Forms.Button navToSave;
         private System.Windows.Forms.Button backup;
         private System.Windows.Forms.Button restore;
-        private System.Windows.Forms.Button checkDrive;
+        private System.Windows.Forms.Button checkSaves;
         private System.Windows.Forms.Button navToBackup;
         private System.Windows.Forms.Button loadME2Btn;
         private System.Windows.Forms.WebBrowser webBrowser1;
